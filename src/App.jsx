@@ -12,19 +12,19 @@ import ChangePassword from './pages/change-password/ChangePassword';
 import ForgotPassword from './pages/forgot-password/ForgotPassword';
 
 // Admin
-const Dashboard = lazy(() => import('./pages/admin/dashboard'));
-const Users = lazy(() => import('./pages/admin/users'));
-const Carousels = lazy(() => import('./pages/admin/carousels'));
-const Coupons = lazy(() => import('./pages/admin/coupons'));
-const Orders = lazy(() => import('./pages/admin/orders'));
-const Products = lazy(() => import('./pages/admin/products'));
+import Dashboard from'./pages/admin/dashboard';
+import Users from'./pages/admin/users';
+import Carousels from'./pages/admin/carousels';
+import Coupons from'./pages/admin/coupons';
+import Orders from'./pages/admin/orders';
+import Products from'./pages/admin/products';
 
 // General
-const Store = lazy(() => import('./pages/store'));
-const Intro = lazy(() => import('./pages/intro'));
-const Order = lazy(() => import('./pages/order'));
-const Detail = lazy(() => import('./pages/detail'));
-const Information = lazy(() => import('./pages/information'));
+import Store from'./pages/store';
+import Intro from'./pages/intro';
+import Order from'./pages/order';
+import Detail from'./pages/detail';
+import Information from'./pages/information';
 
 const App = () => {
   const routes = useRoutes([
