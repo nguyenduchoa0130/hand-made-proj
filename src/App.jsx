@@ -4,6 +4,7 @@ import Footer from './core/layouts/footer';
 import Header from './core/layouts/header';
 import LoadingSpinner from './core/layouts/loading-spinner';
 import Home from './pages/home';
+import { ConfigProvider } from 'antd';
 
 const App = () => {
   const routes = useRoutes([
@@ -14,12 +15,18 @@ const App = () => {
   ]);
 
   return (
-    <>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#74ABFA',
+        },
+      }}
+    >
       <Header />
       <main>{routes}</main>
       <Footer />
       <LoadingSpinner />
-    </>
+    </ConfigProvider>
   );
 };
 
