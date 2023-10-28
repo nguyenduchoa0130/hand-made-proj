@@ -9,27 +9,27 @@ const Footer = () => {
     <div className='footer-up'>
       <div className='footer-left'>
         <img src={logo} alt='logo' />
-        <div>LT Hand Made tự hào mang tới một nền tảng bán nguyên liệu, vật liểu làm đồ thủ công chất lượng, giúp hế hệ trẻ Việt Nam thỏa sức sáng tạo, thể hiện chất riêng</div>
-        <div>
+        <div className='text'>LT Hand Made tự hào mang tới một nền tảng bán nguyên liệu, vật liểu làm đồ thủ công chất lượng, giúp hế hệ trẻ Việt Nam thỏa sức sáng tạo, thể hiện chất riêng</div>
+        <div className='contact'>
           <img src={mailIcon} alt='mailIcon' />
           <span>LThandmade@gmail.com</span>
         </div>
-        <div>
+        <div className='contact'> 
           <img src={phoneIcon} alt='phoneIcon' />
           <span>84+ 948 111 111</span>
         </div>
       </div>
       <div className='footer-right'>
-        <div>Hệ thống LT Hand Made</div>
-        <div>
+        <div className='title'>Hệ thống LT Hand Made</div>
+        <div className='location'>
           <img src={locationIcon} alt='locationIcon' />
           <span>số 165, đường Lê Ngã, Phường Bình Khánh, thành phố Long Xuyên, tỉnh An Giang</span>
         </div>
-        <div>
+        <div className='location'>
           <img src={locationIcon} alt='locationIcon' />
           <span>số 1, đường Võ Văn Ngân, phường Linh Chiểu, thành phố Thủ Đức, thành phố Hồ Chí Minh</span>
         </div>
-        <div>
+        <div className='location'>
           <img src={locationIcon} alt='locationIcon' />
           <span>số 414, đường Huỳnh Văn Bánh, phường 13 , quận Phú Nhuận, thành phố Hồ Chí Minh</span>
         </div>

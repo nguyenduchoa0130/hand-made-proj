@@ -5,12 +5,22 @@ import Header from './core/layouts/header';
 import LoadingSpinner from './core/layouts/loading-spinner';
 import Home from './pages/home';
 import { ConfigProvider } from 'antd';
+import Store from './pages/store';
+import Intro from './pages/intro';
 
 const App = () => {
   const routes = useRoutes([
     {
       path: '',
       element: <Home />,
+    },
+    {
+      path: '/store',
+      element: <Store />,
+    },
+    {
+      path: '/intro',
+      element: <Intro />,
     },
   ]);
 

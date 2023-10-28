@@ -5,11 +5,16 @@ import BagIcon from '../../../assets/icon/bagIcon.svg'
 import LogoutIcon from '../../../assets/icon/logoutIcon.svg'
 import './style.scss'
 import { Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
 const Header = () => {
+  const navigate = useNavigate()
+  const handleNavigate = (direction) => {
+    navigate(direction)
+  }
   return (
     <>
       <header>
-        <img src={Logo} alt='logo' style={{width:'210px',height:'150px'}}/>
+        <img src={Logo} alt='logo' style={{ width: '210px', height: '150px' }} />
         <div className='header-container'>
           <div className='up'>
             <div className='input'>
@@ -26,9 +31,9 @@ const Header = () => {
             </div>
           </div>
           <div className='down'>
-            <Button type="primary" size={'large'}>Trang chủ</Button>
-            <Button type="primary" size={'large'}>Cửa hàng</Button>
-            <Button type="primary" size={'large'}>Giới thiệu</Button>
+            <Button type="primary" size={'large'} onClick={() => handleNavigate('/')}>Trang chủ</Button>
+            <Button type="primary" size={'large'} onClick={() => handleNavigate('/store')}>Cửa hàng</Button>
+            <Button type="primary" size={'large'} onClick={() => handleNavigate('/intro')}>Giới thiệu</Button>
             <Button type="primary" size={'large'}>Mã giảm giá</Button>
           </div>
         </div>
