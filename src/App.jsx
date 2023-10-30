@@ -7,6 +7,7 @@ import Home from './pages/home';
 import { ConfigProvider } from 'antd';
 import Store from './pages/store';
 import Intro from './pages/intro';
+import Order from './pages/order';
 
 const App = () => {
   const routes = useRoutes([
@@ -21,6 +22,14 @@ const App = () => {
     {
       path: '/intro',
       element: <Intro />,
+    },
+    {
+      path: '/intro',
+      element: <Intro />,
+    },
+    {
+      path: '/order',
+      element: <Order />,
     },
   ]);
 

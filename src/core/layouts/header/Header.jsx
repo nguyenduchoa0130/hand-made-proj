@@ -23,7 +23,7 @@ const Header = () => {
                 <img src={SearchIcon} alt='logo' />
               </div>
             </div>
-            <div className='icon-up'>
+            <div className='icon-up' onClick={() => handleNavigate('/order')}>
               <img src={BagIcon} alt='logo' />
             </div>
             <div className='icon-up'>
