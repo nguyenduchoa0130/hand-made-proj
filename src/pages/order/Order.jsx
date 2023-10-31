@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import './style.scss'
-import { Button, Space, Table, Tag } from 'antd';
+import { Button, Table } from 'antd';
+import React, { useState } from 'react';
 import Thumbnail from '../../assets/img/card.png';
+import './style.scss';
 
 
 function Order() {

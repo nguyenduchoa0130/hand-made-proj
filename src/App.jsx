@@ -1,15 +1,13 @@
 import React, { lazy } from 'react';
 import { useRoutes } from 'react-router-dom';
 import LazyComponent from './core/components/lazy-component';
+
 import AdminLayout from './core/layouts/admin-layout';
 import LoadingSpinner from './core/layouts/loading-spinner';
+import NonAuth from './core/layouts/non-auth';
 import Home from './pages/home';
-import { ConfigProvider } from 'antd';
-import Store from './pages/store';
-import Intro from './pages/intro';
-import Order from './pages/order';
-import Detail from './pages/detail/Detail';
 
+// Admin
 const Dashboard = lazy(() => import('./pages/admin/dashboard'));
 const Users = lazy(() => import('./pages/admin/users'));
 const Carousels = lazy(() => import('./pages/admin/carousels'));
@@ -17,11 +15,40 @@ const Coupons = lazy(() => import('./pages/admin/coupons'));
 const Orders = lazy(() => import('./pages/admin/orders'));
 const Products = lazy(() => import('./pages/admin/products'));
 
+// General
+const Store = lazy(() => import('./pages/store'));
+const Intro = lazy(() => import('./pages/intro'));
+const Order = lazy(() => import('./pages/order'));
+const Detail = lazy(() => import('./pages/detail'));
+
 const App = () => {
   const routes = useRoutes([
     {
-      path: '',
-      element: <Home />,
+      path: '/',
+      element: <NonAuth />,
+      children: [
+        {
+          path: '',
+          index: true,
+          element: <Home />,
+        },
+        {
+          path: 'store',
+          element: <LazyComponent component={<Store />} />,
+        },
+        {
+          path: 'intro',
+          element: <LazyComponent component={<Intro />} />,
+        },
+        {
+          path: 'order',
+          element: <LazyComponent component={<Order />} />,
+        },
+        {
+          path: 'detail/:id',
+          element: <LazyComponent component={<Detail />} />,
+        },
+      ],
     },
     {
       path: '/admin',
@@ -54,34 +81,13 @@ const App = () => {
         },
       ],
     },
-    {
-      path: '/store',
-      element: <Store />,
-    },
-    {
-      path: '/intro',
-      element: <Intro />,
-    },
-    {
-      path: '/order',
-      element: <Order />,
-    },
-    {
-      path: 'detail/:id',
-      element: <Detail />,
-    },
   ]);
 
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: '#74ABFA',
-        },
-      }}>
+    <>
       {routes}
       <LoadingSpinner />
-    </ConfigProvider>
+    </>
   );
 };
 

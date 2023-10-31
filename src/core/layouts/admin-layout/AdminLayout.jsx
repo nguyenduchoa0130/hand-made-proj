@@ -52,6 +52,15 @@ const menuItems = [
   },
 ];
 
+const titleMap = {
+  admin: 'admin dashboard',
+  orders: 'quản lý đơn hàng',
+  users: 'quản lý tài khoản',
+  products: 'quản lý sản phẩm',
+  carousels: 'quảng cáo',
+  coupons: 'khuyến mãi',
+};
+
 const AdminLayout = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [currentPage, setCurrentPage] = useState('admin');
@@ -98,11 +107,13 @@ const AdminLayout = () => {
           </Layout.Sider>
           <Layout.Content>
             <div className='h-100'>
-              <div className='py-2 px-4 border-bottom flex ai-center jc-between pr-5'>
-                <Typography.Title className='text-uppercase m-0'>{currentPage}</Typography.Title>
+              <div className='py-3 px-4 border-bottom flex ai-center jc-between pr-5'>
+                <Typography.Title className='text-capitalize m-0'>
+                  {titleMap[currentPage]}
+                </Typography.Title>
                 <Tooltip title='Đăng xuất' arrow={true}>
                   <Button type='primary' danger>
-                    <LoginOutlined />
+                    <LoginOutlined /> Đăng xuất
                   </Button>
                 </Tooltip>
               </div>
