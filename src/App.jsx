@@ -8,6 +8,7 @@ import { ConfigProvider } from 'antd';
 import Store from './pages/store';
 import Intro from './pages/intro';
 import Order from './pages/order';
+import Detail from './pages/detail/Detail';
 
 const App = () => {
   const routes = useRoutes([
@@ -24,12 +25,12 @@ const App = () => {
       element: <Intro />,
     },
     {
-      path: '/intro',
-      element: <Intro />,
-    },
-    {
       path: '/order',
       element: <Order />,
+    },
+    {
+      path: 'detail/:id',
+      element: <Detail />,
     },
   ]);
 

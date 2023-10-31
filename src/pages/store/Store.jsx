@@ -6,6 +6,7 @@ import ImageSale from '../../assets/img/Banner-2.png'
 import './style.scss'
 import CardStore from '../../core/components/card-store/CardStore';
 import { Pagination } from 'antd';
+import { useNavigate } from 'react-router-dom';
 const Store = () => {
     return <div className='store'>
         <div className='banner'>
