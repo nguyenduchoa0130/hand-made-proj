@@ -2,7 +2,7 @@ import { Form, Radio } from 'antd';
 import React from 'react';
 import { Controller } from 'react-hook-form';
 
-const FormRadio = ({ label, error, name, control, rules, radioOptions = [] }) => {
+const FormRadioGroup = ({ label, error, name, control, rules, radioOptions = [] }) => {
   return (
     <>
       <Form.Item label={label} validateStatus={error ? 'error' : ''} help={error && error.message}>
@@ -25,4 +25,4 @@ const FormRadio = ({ label, error, name, control, rules, radioOptions = [] }) =>
   );
 };
 
-export default FormRadio;
+export default FormRadioGroup;
