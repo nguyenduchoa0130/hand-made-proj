@@ -1,0 +1,69 @@
+.card-store {
+    width: 210px;
+    padding: 5px;
+    border: unset;
+    border-radius: 15px;
+    background: #FFF;
+    font-size: 14px;
+    border: 1px solid #00000020;
+
+    img {
+        margin: 10px;
+        width: 180px;
+        height: 180px;
+        border-radius: 10px;
+    }
+
+    .card-content {
+        .title {
+            color: #450000;
+        }
+
+        hr {
+            height: 1px;
+            background-color: #0000006b;
+        }
+
+        .price {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+
+            span:first-child {
+                color: #F00;
+                font-weight: 600;
+                margin-right: 30px;
+
+            }
+
+            span:last-child {
+                text-decoration: line-through;
+
+            }
+        }
+
+        .button-container {
+            width: 100%;
+            display: flex;
+            justify-content: right;
+            padding-bottom: 5px;
+
+            .button-store {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 44px;
+                height: 44px;
+                padding: 8px;
+                margin-right: 20px;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+
+
+    }
+}

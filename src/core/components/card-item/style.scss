@@ -1,0 +1,32 @@
+.card {
+    width: 231px;
+    height: 260px;
+    padding: 5px;
+    border: unset;
+    border-radius: 15px 15px 10px 10px;
+    background: #FFF;
+    cursor: pointer;
+    &:hover{
+    background: #cacaca;
+
+    }
+    .card-content {
+        padding: 5px 10px 0 10px;
+
+        div:first-child {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #450000;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        div:last-child {
+            color: #FF3939;
+            font-size: 20px;
+            float: right;
+            font-weight: 600;
+        }
+    }
+}

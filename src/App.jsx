@@ -4,6 +4,11 @@ import LazyComponent from './core/components/lazy-component';
 import AdminLayout from './core/layouts/admin-layout';
 import LoadingSpinner from './core/layouts/loading-spinner';
 import Home from './pages/home';
+import { ConfigProvider } from 'antd';
+import Store from './pages/store';
+import Intro from './pages/intro';
+import Order from './pages/order';
+import Detail from './pages/detail/Detail';
 
 const Dashboard = lazy(() => import('./pages/admin/dashboard'));
 const Users = lazy(() => import('./pages/admin/users'));
@@ -49,13 +54,34 @@ const App = () => {
         },
       ],
     },
+    {
+      path: '/store',
+      element: <Store />,
+    },
+    {
+      path: '/intro',
+      element: <Intro />,
+    },
+    {
+      path: '/order',
+      element: <Order />,
+    },
+    {
+      path: 'detail/:id',
+      element: <Detail />,
+    },
   ]);
 
   return (
-    <>
+    <ConfigProvider
+      theme={{
+        token: {
+          colorPrimary: '#74ABFA',
+        },
+      }}>
       {routes}
       <LoadingSpinner />
-    </>
+    </ConfigProvider>
   );
 };
 

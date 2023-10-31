@@ -1,0 +1,30 @@
+.home {
+    padding: 20px 3%;
+
+    .banner {
+        display: flex;
+        column-gap: 20px;
+
+        img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        div:first-child {
+            width: 70%;
+        }
+        div:last-child {
+            width: 30%;
+        }
+    }
+    .category{
+        display: flex;
+        justify-content: space-around; 
+        font-size: 20px;
+        font-weight: 600;
+        margin: 40px 0;
+        background-color: #FFEDED;
+        padding: 10px 20px;
+        border-radius: 10px;
+    }
+}
