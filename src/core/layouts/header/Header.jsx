@@ -33,7 +33,7 @@ const Header = () => {
                 {dataOrders.length}
               </div>
             </div>
-            <div className='icon-up'>
+            <div className='icon-up' onClick={() => handleNavigate('/login')}>
               <img src={LogoutIcon} alt='logo' />
             </div>
           </div>

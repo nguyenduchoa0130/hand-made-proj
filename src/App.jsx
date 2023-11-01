@@ -6,6 +6,8 @@ import AdminLayout from './core/layouts/admin-layout';
 import LoadingSpinner from './core/layouts/loading-spinner';
 import NonAuth from './core/layouts/non-auth';
 import Home from './pages/home';
+import Login from './pages/auth/login/Login';
+import Register from './pages/auth/register/Register';
 
 // Admin
 const Dashboard = lazy(() => import('./pages/admin/dashboard'));
@@ -31,6 +33,14 @@ const App = () => {
           path: '',
           index: true,
           element: <Home />,
+        },
+        {
+          path: 'login',
+          element: <LazyComponent component={<Login />} />,
+        },
+        {
+          path: 'register',
+          element: <LazyComponent component={<Register />} />,
         },
         {
           path: 'store',
