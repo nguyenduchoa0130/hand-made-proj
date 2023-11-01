@@ -62,5 +62,21 @@ header {
             }
         }
     }
-
+    .icon-store{
+        position: relative;
+        .number-order{
+            position: absolute;
+            bottom: -5px;
+            right:0;
+            background-color: red;
+            border-radius: 50%;
+            color: white;
+            font-size: 14px;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
 }

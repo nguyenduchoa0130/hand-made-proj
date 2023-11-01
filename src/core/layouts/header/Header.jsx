@@ -6,8 +6,12 @@ import LogoutIcon from '../../../assets/icon/logoutIcon.svg'
 import './style.scss'
 import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectListProduct } from '../../../stores/global/global.selectors';
 const Header = () => {
   const navigate = useNavigate()
+  const dataOrders = useSelector(selectListProduct)
+
   const handleNavigate = (direction) => {
     navigate(direction)
   }
@@ -23,8 +27,11 @@ const Header = () => {
                 <img src={SearchIcon} alt='logo' />
               </div>
             </div>
-            <div className='icon-up' onClick={() => handleNavigate('/order')}>
+            <div className='icon-up icon-store' onClick={() => handleNavigate('/order')}>
               <img src={BagIcon} alt='logo' />
+              <div className='number-order'>
+                {dataOrders.length}
+              </div>
             </div>
             <div className='icon-up'>
               <img src={LogoutIcon} alt='logo' />

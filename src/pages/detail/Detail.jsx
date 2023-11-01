@@ -1,11 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './style.scss'
 import ImageCard from '../../assets/img/cardlarge.png'
-import { Button } from 'antd'
+import { Button, message } from 'antd'
 import CardItem from '../../core/components/card-item/CardItem'
+import { useDispatch } from 'react-redux'
+import { addProduct } from '../../stores/global/global.actions'
 function Detail() {
+    const [count, setCount] = useState(1);
+    const [messageApi, contextHolder] = message.useMessage();
+    const dispatch = useDispatch()
+    const itemMock = { id: '2', img: ImageCard, title: "Bộ nguyên liệu làm thỏ bông (bao gồm kim, khung)", oldPrice: 6000000, newPrice: 50000 };
+    const add = () => {
+        dispatch(addProduct({ ...itemMock, number: count }));
+        messageApi.open({
+            type: 'success',
+            content: 'Thêm thành công',
+        });
+    }
+
     return (
         <div className='detail'>
+            {contextHolder}
             <div className='detail-content'>
                 <div className='left'>
                     <div className='thumbnail'>
@@ -30,13 +45,17 @@ function Detail() {
                                 Số lượng:
                             </div>
                             <div className='count'>
-                                <div>-</div>
-                                <div>1</div>
-                                <div>+</div>
+                                <div onClick={() => {
+                                    if (count !== 1) {
+                                        setCount(count - 1)
+                                    }
+                                }}>-</div>
+                                <div>{count}</div>
+                                <div onClick={() => setCount(count + 1)}>+</div>
                             </div>
                         </div>
                         <div className='add'>
-                            <Button>Thêm vào giỏ hàng</Button>
+                            <Button onClick={add}>Thêm vào giỏ hàng</Button>
                         </div>
                     </div>
 

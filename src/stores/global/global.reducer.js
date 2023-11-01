@@ -13,7 +13,7 @@ const globalReducer = (state = initialState, { type, action }) => {
       return { ...state, isLoading: false };
     }
     case actions.ADD_PRODUCT: {
-      const index = state.listProductOrders.findIndex(item => item.id === action.id)
+      const index = state.listProductOrders?.findIndex(item => item.id === action.id)
       if (index != -1) {
         state.listProductOrders[index].number++
         return { ...state, isLoading: false };

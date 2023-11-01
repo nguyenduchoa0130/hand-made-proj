@@ -81,8 +81,9 @@ function Order() {
     const calculateItemTotal = (item) => item.newPrice * item.number;
 
     const calculateOverallTotal = () => {
-        return data.reduce((total, item) => total + calculateItemTotal(item), 0);
+        return data?.reduce((total, item) => total + calculateItemTotal(item), 0);
     };
+
     return (
         <div className='order'>
             <div className='order-title'>Giỏ hàng của bạn</div>
@@ -91,7 +92,7 @@ function Order() {
             </div>
             <div className='total'>
                 <div>Tổng thanh toán 3 sản phẩm:</div>
-                <div>{calculateOverallTotal()}đ</div>
+                <div>{calculateOverallTotal() || "0"} đ</div>
                 <Button type='primary' size='large'>Mua hàng</Button>
             </div>
         </div>
