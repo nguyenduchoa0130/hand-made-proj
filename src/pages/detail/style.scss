@@ -140,12 +140,30 @@
                 padding: 20px;
                 border-radius: 5px;
                 margin-top: 20px;
-                .title{
+
+                .title {
                     color: #450000;
                     font-size: 25px;
                 }
             }
         }
 
+    }
+
+    .reference {
+        background-color: #FFEDED;
+        padding: 20px;
+        margin-top: 40px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        .title-refer {
+            font-size: 25px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .content-refer{
+            display: flex;
+            justify-content: space-between;
+        }
     }
 }

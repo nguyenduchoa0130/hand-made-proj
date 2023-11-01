@@ -12,11 +12,13 @@
         width: 180px;
         height: 180px;
         border-radius: 10px;
+        cursor: pointer;
     }
 
     .card-content {
         .title {
             color: #450000;
+            cursor: pointer;
         }
 
         hr {

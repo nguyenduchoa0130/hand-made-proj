@@ -60,9 +60,9 @@ function Detail() {
                 </div>
 
             </div>
-            <div>
-                <div>Sản phẩm cùng loại</div>
-                <div>
+            <div className='reference'>
+                <div className='title-refer'>Sản phẩm cùng loại</div>
+                <div className='content-refer'>
                     <CardItem />
                     <CardItem />
                     <CardItem />

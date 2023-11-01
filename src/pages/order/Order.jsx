@@ -1,43 +1,17 @@
+import React, { useState } from 'react'
+import './style.scss'
 import { Button, Table } from 'antd';
-import React, { useState } from 'react';
-import Thumbnail from '../../assets/img/card.png';
-import './style.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectListProduct } from '../../stores/global/global.selectors';
+import { decreaseNumber, increaseNumber } from '../../stores/global/global.actions';
 
 
 function Order() {
-    const [data, setData] = useState([
-        {
-            key: '1',
-            name: 'John Brown',
-            priceOld: 6000000,
-            priceNew: 500000,
-            number: 1,
-            total: 100000000,
-            img: Thumbnail
-
-        },
-        {
-            key: '2',
-            name: 'Jim Green',
-            priceOld: 6000000,
-            priceNew: 500000,
-            number: 1,
-            total: 100000000,
-            img: Thumbnail
-        },
-        {
-            key: '3',
-            name: 'Joe Black',
-            priceOld: 6000000,
-            priceNew: 500000,
-            number: 1,
-            total: 100000000,
-            img: Thumbnail
-        },
-
-    ])
+    const dispatch = useDispatch()
+    const data = useSelector(selectListProduct)
     const [selectedRowKeys, setSelectedRowKeys] = useState();
     const [selectedRow, setSelectedRow] = useState();
+    const [number, setNumber] = useState(0);
     const columns = [
         {
             title: 'Hình ảnh',
@@ -47,16 +21,16 @@ function Order() {
         },
         {
             title: 'Tên sản phẩm',
-            dataIndex: 'name',
-            key: 'name',
+            dataIndex: 'title',
+            key: 'title',
             render: (text) => <div className='title'>{text}</div>
         },
         {
             title: 'Đơn giá',
-            dataIndex: 'priceNew',
-            key: 'priceNew',
+            dataIndex: 'newPrice',
+            key: 'newPrice',
             align: 'center',
-            render: (text, item) => <div className='price'><span className='priceOld'>{item.priceOld.toLocaleString('en-US')}đ</span>{item.priceNew.toLocaleString('en-US')}đ</div>
+            render: (text, item) => <div className='price'><span className='priceOld'>{item.oldPrice.toLocaleString('en-US')}đ</span>{item.newPrice.toLocaleString('en-US')}đ</div>
         },
         {
             title: 'Số lượng',
@@ -64,9 +38,15 @@ function Order() {
             dataIndex: 'number',
             align: 'center',
             render: (text, item) => <div className='number'>
-                <button>-</button>
+                <button onClick={() => {
+                    setNumber(number - 1);
+                    dispatch(decreaseNumber(item))
+                }}>-</button>
                 <span>{text}</span>
-                <button>+</button>
+                <button onClick={() => {
+                    setNumber(number + 1);
+                    dispatch(increaseNumber(item))
+                }}>+</button>
             </div>
         },
         {
@@ -74,15 +54,17 @@ function Order() {
             key: 'total',
             dataIndex: 'total',
             align: 'center',
-            render: (text) => <div>{text.toLocaleString('en-US')}đ</div>
-
+            render: (text, item) => {
+                let total = item.number * item.newPrice
+                return <div>{total.toLocaleString('en-US')}đ</div>
+            }
         },
         {
             title: '',
             key: 'action',
             align: 'right',
             render: (_, record) => (
-                <button className='button-delete'>Xóa</button>
+                <button className='button-delete' >Xóa</button>
             ),
         },
     ];
@@ -96,7 +78,11 @@ function Order() {
         selectedRowKeys,
         onChange: onSelectChange,
     };
+    const calculateItemTotal = (item) => item.newPrice * item.number;
 
+    const calculateOverallTotal = () => {
+        return data.reduce((total, item) => total + calculateItemTotal(item), 0);
+    };
     return (
         <div className='order'>
             <div className='order-title'>Giỏ hàng của bạn</div>
@@ -105,7 +91,7 @@ function Order() {
             </div>
             <div className='total'>
                 <div>Tổng thanh toán 3 sản phẩm:</div>
-                <div>20.000.000.000đ</div>
+                <div>{calculateOverallTotal()}đ</div>
                 <Button type='primary' size='large'>Mua hàng</Button>
             </div>
         </div>
