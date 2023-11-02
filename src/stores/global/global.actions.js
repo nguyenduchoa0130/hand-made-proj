@@ -13,3 +13,5 @@ export const increaseNumber = (payload) => ({ type: INCREASE_NUMBER, action: pay
 export const DECREASE_NUMBER = 'decrease_number';
 export const decreaseNumber = (payload) => ({ type: DECREASE_NUMBER, action: payload });
 
+export const SET_USER = 'set_user';
+export const setUser = (payload) => ({ type: SET_USER, action: payload });

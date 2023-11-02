@@ -1,6 +1,7 @@
 import * as actions from './global.actions';
 // Reducer
 const initialState = {
+  userInfo: {},
   listProductOrders: [],
   isLoading: false,
 };
@@ -38,6 +39,10 @@ const globalReducer = (state = initialState, { type, action }) => {
           state.listProductOrders[index].number--
         }
       }
+      return { ...state, isLoading: false };
+    }
+    case actions.SET_USER: {
+      state.userInfo = action
       return { ...state, isLoading: false };
     }
     default: {

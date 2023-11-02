@@ -1,18 +1,29 @@
 import React from 'react'
 import './style.scss'
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../../stores/global/global.actions';
 
 export default function Login() {
+    const [messageApi, contextHolder] = message.useMessage();
+
     const navigate = useNavigate();
+    const dispatch = useDispatch()
     const onFinish = (values) => {
-        console.log('Success:', values);
+        dispatch(setUser(values))
+        navigate('/')
+        messageApi.open({
+            type: 'success',
+            content: 'Đăng nhập thành công',
+        });
     };
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
     return (
         <div className='login'>
+            {contextHolder}
             <div>
                 <h2 className='title'>Đăng Nhập</h2>
                 <Form
@@ -35,7 +46,7 @@ export default function Login() {
                 >
                     <Form.Item
                         label="Email"
-                        name="username"
+                        name="email"
                         rules={[
                             {
                                 required: true,
@@ -73,9 +84,7 @@ export default function Login() {
                             <Button type="dashed" onClick={() => navigate('/register')} >
                                 Đăng Ký
                             </Button>
-                            
                         </div>
-
                     </Form.Item>
                 </Form>
             </div>
