@@ -44,7 +44,7 @@ export default function Register() {
                             },
                         ]}
                     >
-                        <Input />
+                        <Input size='large'/>
                     </Form.Item>
 
                     <Form.Item
@@ -57,7 +57,7 @@ export default function Register() {
                             },
                         ]}
                     >
-                        <Input.Password />
+                        <Input.Password size='large'/>
                     </Form.Item>
 
                     <Form.Item

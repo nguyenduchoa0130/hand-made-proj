@@ -25,7 +25,9 @@ const Header = () => {
     {
       key: '1',
       label: (
-        <div>Thông tin cá nhân</div>
+        <div onClick={() => {
+          handleNavigate('/information')
+        }}>Thông tin cá nhân</div>
       ),
     },
     {
@@ -66,7 +68,7 @@ const Header = () => {
                 <img src={LogoutIcon} alt='logo' />
               </div>
             </> : <>
-              <div className='icon-up'>
+              <div className='icon-up' onClick={() => handleNavigate('/order')}>
                 <img src={BagIcon} alt='logo' />
               </div>
               <div className='icon-up'>

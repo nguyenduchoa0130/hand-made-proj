@@ -55,7 +55,7 @@ export default function Login() {
                             },
                         ]}
                     >
-                        <Input />
+                        <Input size='large'/>
                     </Form.Item>
 
                     <Form.Item
@@ -68,7 +68,7 @@ export default function Login() {
                             },
                         ]}
                     >
-                        <Input.Password />
+                        <Input.Password size='large'/>
                     </Form.Item>
 
                     <Form.Item

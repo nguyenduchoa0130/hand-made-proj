@@ -22,6 +22,7 @@ const Store = lazy(() => import('./pages/store'));
 const Intro = lazy(() => import('./pages/intro'));
 const Order = lazy(() => import('./pages/order'));
 const Detail = lazy(() => import('./pages/detail'));
+const Information = lazy(() => import('./pages/information'));
 
 const App = () => {
   const routes = useRoutes([
@@ -41,6 +42,10 @@ const App = () => {
         {
           path: 'register',
           element: <LazyComponent component={<Register />} />,
+        },
+        {
+          path: 'information',
+          element: <LazyComponent component={<Information />} />,
         },
         {
           path: 'store',
