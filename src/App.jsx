@@ -8,6 +8,8 @@ import NonAuth from './core/layouts/non-auth';
 import Home from './pages/home';
 import Login from './pages/auth/login/Login';
 import Register from './pages/auth/register/Register';
+import ChangePassword from './pages/change-password/ChangePassword';
+import ForgotPassword from './pages/forgot-password/ForgotPassword';
 
 // Admin
 const Dashboard = lazy(() => import('./pages/admin/dashboard'));
@@ -46,6 +48,14 @@ const App = () => {
         {
           path: 'information',
           element: <LazyComponent component={<Information />} />,
+        },
+        {
+          path: 'change-password',
+          element: <LazyComponent component={<ChangePassword />} />,
+        },
+        {
+          path: 'forgot-password',
+          element: <LazyComponent component={<ForgotPassword />} />,
         },
         {
           path: 'store',

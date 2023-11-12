@@ -1,10 +1,37 @@
-.login{
+.login {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 70vh;
-    .title{
-        text-align: center;
-        margin-bottom: 40px;
+    background-color: #fff2f2;
+
+    .login-title {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+
+        .title {
+            text-align: center;
+            width: 50%;
+            margin: 0;
+            cursor: pointer;
+            background-color: rgb(219, 219, 219);
+            padding: 20px;
+            font-size: 20px;
+        }
+
+        .active {
+            background-color: rgb(190, 190, 190);
+        }
+    }
+
+    .login-container {
+        background-color: white;
+        border-radius: 10px;
+        width: 600px;
+
+        .login-form {
+            padding: 0 20px;
+        }
     }
 }

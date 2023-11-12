@@ -1,27 +1,47 @@
 import React from 'react'
 import './style.scss'
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { authService } from '../../../shared/services/auth-service';
 
 export default function Register() {
     const navigate = useNavigate()
+    const [messageApi, contextHolder] = message.useMessage();
+
     const onFinish = (values) => {
-        console.log('Success:', values);
+        authService.signUp(values).then((data) => {
+            setTimeout(() => {
+                navigate('/login')
+            }, 1000);
+            messageApi.open({
+                type: 'success',
+                content: 'Đăng ký thành công',
+            });
+        }).catch(err=>messageApi.open({
+            type: 'error',
+            content: err.response.data.message,
+        }));
+        
     };
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
     };
     return (
         <div className='login'>
-            <div>
-                <h2 className='title'>Đăng Ký</h2>
+            {contextHolder}
+            <div className='login-container'>
+                <div className='login-title'>
+                    <h2 className='title' style={{borderTopLeftRadius:'10px'}} onClick={() => navigate('/login')}>Đăng Nhập</h2>
+                    <h2 className='title active' style={{borderTopRightRadius:'10px'}}  >Đăng Ký</h2>
+                </div>
+                <div className='login-form'>
                 <Form
                     name="basic"
                     labelCol={{
-                        span: 8,
+                        span: 4,
                     }}
                     wrapperCol={{
-                        span: 16,
+                        span: 20,
                     }}
                     style={{
                         maxWidth: 600,
@@ -34,8 +54,21 @@ export default function Register() {
                     autoComplete="off"
                 >
                     <Form.Item
+                        label="Tên"
+                        name="name"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Vui lòng nhập tên!',
+                            },
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
+
+                    <Form.Item
                         label="Email"
-                        name="username"
+                        name="email"
                         rules={[
                             {
                                 required: true,
@@ -62,23 +95,20 @@ export default function Register() {
 
                     <Form.Item
                         wrapperCol={{
-                            offset: 8,
-                            span: 16,
+                            span: 24,
                         }}
                     >
-                        <div style={{ display: 'flex' }}>
-
-                            <Button type="primary" htmlType="submit" style={{ marginRight: '10px' }}>
+                        <div style={{ textAlign:'center'}}>
+                            <Button type="primary" size='large' htmlType="submit" style={{ marginRight: '10px' }}>
                                 Đăng Ký
-                            </Button>
-                            <Button type="dashed" onClick={() => navigate('/login')}>
-                                Đăng Nhập
                             </Button>
                         </div>
                     </Form.Item>
                 </Form>
-            </div>
-
-        </div>
+                </div>
+               
+               </div>
+   
+           </div>
     )
 }

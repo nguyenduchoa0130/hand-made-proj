@@ -2,21 +2,27 @@ import React from 'react'
 import './style.scss'
 import { Button, Form, Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../../../stores/global/global.actions';
+import { authService } from '../../../shared/services/auth-service';
 
 export default function Login() {
     const [messageApi, contextHolder] = message.useMessage();
 
     const navigate = useNavigate();
-    const dispatch = useDispatch()
     const onFinish = (values) => {
-        dispatch(setUser(values))
-        navigate('/')
-        messageApi.open({
-            type: 'success',
-            content: 'Đăng nhập thành công',
-        });
+        authService.signIn(values).then((data) => {
+            localStorage.setItem('user', JSON.stringify({ ...data, email: values.email }));
+            setTimeout(() => {
+                navigate('/')
+            }, 1000);
+            messageApi.open({
+                type: 'success',
+                content: 'Đăng nhập thành công',
+            });
+        }).catch(err => messageApi.open({
+            type: 'error',
+            content: err.response.data.message,
+        }));
+
     };
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -24,15 +30,19 @@ export default function Login() {
     return (
         <div className='login'>
             {contextHolder}
-            <div>
-                <h2 className='title'>Đăng Nhập</h2>
+            <div className='login-container'>
+                <div className='login-title'>
+                    <h2 className='title active' style={{borderTopLeftRadius:'10px'}}>Đăng Nhập</h2>
+                    <h2 className='title' style={{borderTopRightRadius:'10px'}}  onClick={() => navigate('/register')}>Đăng Ký</h2>
+                </div>
+                <div className='login-form'>
                 <Form
                     name="basic"
                     labelCol={{
-                        span: 8,
+                        span: 4,
                     }}
                     wrapperCol={{
-                        span: 16,
+                        span: 20,
                     }}
                     style={{
                         maxWidth: 600,
@@ -55,7 +65,7 @@ export default function Login() {
                             },
                         ]}
                     >
-                        <Input size='large'/>
+                        <Input size='large' />
                     </Form.Item>
 
                     <Form.Item
@@ -68,25 +78,27 @@ export default function Login() {
                             },
                         ]}
                     >
-                        <Input.Password size='large'/>
+                        <Input.Password size='large' />
                     </Form.Item>
 
                     <Form.Item
                         wrapperCol={{
-                            offset: 8,
-                            span: 16,
+                            span: 24,
                         }}
                     >
-                        <div style={{ display: 'flex' }}>
-                        <Button type="primary" htmlType="submit" style={{ marginRight: '10px' }} >
+                        <div className='forgot' onClick={() => navigate('/forgot-password')}>
+                            Quên mật khẩu?
+                        </div>
+                        <div style={{textAlign:'center'}}>
+                            <Button type="primary" size='large' htmlType="submit" style={{ marginRight: '10px' }} >
                                 Đăng Nhập
                             </Button>
-                            <Button type="dashed" onClick={() => navigate('/register')} >
-                                Đăng Ký
-                            </Button>
                         </div>
+
                     </Form.Item>
                 </Form>
+                </div>
+               
             </div>
 
         </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Logo from '../../../assets/img/logo.svg'
 import SearchIcon from '../../../assets/icon/searchIcon.svg'
 import BagIcon from '../../../assets/icon/bagIcon.svg'
@@ -11,13 +11,15 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectListProduct, selectUserInfo } from '../../../stores/global/global.selectors';
 import { setUser } from '../../../stores/global/global.actions';
+import { authService } from '../../../shared/services/auth-service';
 const Header = () => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const [messageApi, contextHolder] = message.useMessage();
 
   const dataOrders = useSelector(selectListProduct)
-  const userInfo = useSelector(selectUserInfo)
+  const userInfo = JSON.parse(localStorage.getItem('user'));
+  console.log(userInfo)
   const handleNavigate = (direction) => {
     navigate(direction)
   }
@@ -34,7 +36,16 @@ const Header = () => {
       key: '2',
       label: (
         <div onClick={() => {
-          dispatch(setUser({}))
+          handleNavigate('/change-password')
+        }}>Đổi mật khẩu</div>
+      ),
+    },
+    {
+      key: '3',
+      label: (
+        <div onClick={() => {
+          localStorage.removeItem('user')
+          handleNavigate('/')
           messageApi.open({
             type: 'success',
             content: 'Đăng xuất thành công',
@@ -42,8 +53,8 @@ const Header = () => {
         }}>Đăng xuất</div>
       ),
     },
-
   ];
+ 
   return (
     <>
       <header>
@@ -57,7 +68,7 @@ const Header = () => {
                 <img src={SearchIcon} alt='logo' />
               </div>
             </div>
-            {!userInfo.email ? <>
+            {!userInfo ? <>
               <div className='icon-up icon-store' onClick={() => handleNavigate('/order')}>
                 <img src={BagIcon} alt='logo' />
                 <div className='number-order'>
