@@ -95,7 +95,9 @@ const AdminLayout = () => {
                 {menuItems.map((item, idx) => (
                   <Menu.Item
                     key={`menu-item-${idx}`}
-                    className={currentPage === item.activeKey ? 'ant-menu-item-selected' : ''}>
+                    className={
+                      currentPage.includes(item.activeKey) ? 'ant-menu-item-selected' : ''
+                    }>
                     <NavLink to={item.path} className='flex ai-center'>
                       {item.icon}
                       <span>{item.label}</span>
@@ -112,7 +114,7 @@ const AdminLayout = () => {
                   {titleMap[currentPage]}
                 </Typography.Title>
                 <Tooltip title='Đăng xuất' arrow={true}>
-                  <Button type='primary' danger>
+                  <Button type='primary' danger size='large'>
                     <LoginOutlined /> Đăng xuất
                   </Button>
                 </Tooltip>

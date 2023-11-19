@@ -1,30 +1,30 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import { useRoutes } from 'react-router-dom';
 import LazyComponent from './core/components/lazy-component';
 
 import AdminLayout from './core/layouts/admin-layout';
 import LoadingSpinner from './core/layouts/loading-spinner';
 import NonAuth from './core/layouts/non-auth';
-import Home from './pages/home';
 import Login from './pages/auth/login/Login';
 import Register from './pages/auth/register/Register';
 import ChangePassword from './pages/change-password/ChangePassword';
 import ForgotPassword from './pages/forgot-password/ForgotPassword';
+import Home from './pages/home';
 
 // Admin
-import Dashboard from'./pages/admin/dashboard';
-import Users from'./pages/admin/users';
-import Carousels from'./pages/admin/carousels';
-import Coupons from'./pages/admin/coupons';
-import Orders from'./pages/admin/orders';
-import Products from'./pages/admin/products';
+import Carousels from './pages/admin/carousels';
+import Coupons from './pages/admin/coupons';
+import Dashboard from './pages/admin/dashboard';
+import Orders from './pages/admin/orders';
+import Products from './pages/admin/products';
+import Users from './pages/admin/users';
 
 // General
-import Store from'./pages/store';
-import Intro from'./pages/intro';
-import Order from'./pages/order';
-import Detail from'./pages/detail';
-import Information from'./pages/information';
+import Detail from './pages/detail';
+import Information from './pages/information';
+import Intro from './pages/intro';
+import Order from './pages/order';
+import Store from './pages/store';
 
 const App = () => {
   const routes = useRoutes([

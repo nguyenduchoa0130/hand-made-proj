@@ -10,6 +10,7 @@ const DynamicTable = ({
   searchByFields = [],
   pageSize = 10,
   rowKey = null,
+  hasBorder = false,
 }) => {
   const [query, setQuery] = useState('');
   const debouncedQuery = useDebounce(query);
@@ -39,6 +40,7 @@ const DynamicTable = ({
           placeholder={`Search by ${searchByFields.join(', ')}`}
           prefix={<AiOutlineSearch />}
           onChange={handleQueryChange}
+          size='large'
         />
       )}
       <div className='py-2'>
@@ -47,6 +49,7 @@ const DynamicTable = ({
           columns={cols}
           dataSource={filteredData}
           pagination={{ position: ['bottomRight'], pageSize }}
+          bordered={hasBorder}
         />
       </div>
     </>
