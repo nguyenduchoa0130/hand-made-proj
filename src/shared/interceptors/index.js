@@ -10,9 +10,8 @@ axiosClient.interceptors.request.use(
     const token = JSON.parse(localStorage.getItem('user'));
 
     // If a token exists, add it to the headers
-    if (token.access_token) {
+    if (token?.access_token) {
       config.headers["x-access-token"] = token.access_token;
-      console.log(token.access_token,"abcd")
     }
 
     return config;

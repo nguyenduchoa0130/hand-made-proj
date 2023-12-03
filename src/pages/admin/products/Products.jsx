@@ -17,12 +17,15 @@ const getBase64 = (file) =>
   });
 const Products = () => {
   const [isCreate, setIsCreate] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [products, setProducts] = useState([]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [previewTitle, setPreviewTitle] = useState('');
+  const [idProduct, setIsProduct] = useState();
   const [fileList, setFileList] = useState();
   const handleCancel = () => setPreviewOpen(false);
+  const user = JSON.parse(localStorage.getItem('user'));
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -32,7 +35,23 @@ const Products = () => {
     setPreviewTitle(file.name || file.url.substring(file.url.lastIndexOf('/') + 1));
   };
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
+  const openEditModal = (values) => {
 
+    console.log(values)
+    setIsProduct(values._id)
+    let dataImg = [];
+    values.image.map(item => {
+      dataImg.push({ url: item[0] })
+    })
+    reset({
+      name: values.name,
+      type: values.type,
+      price: values.price,
+      countInStock: values.countInStock,
+    })
+    setFileList(dataImg)
+    setIsEdit(true)
+  }
   const {
     control,
     handleSubmit,
@@ -78,7 +97,13 @@ const Products = () => {
         title: 'Giá',
         dataIndex: 'price',
         key: 'price',
-      }
+      },
+      {
+        title: '',
+        key: 'action',
+        align: 'right',
+        render: (_, record) => <Button type='primary' onClick={() => openEditModal(record)}>Chi Tiết</Button>,
+      },
     ];
   }, []);
   const [messageApi, contextHolder] = message.useMessage();
@@ -88,7 +113,7 @@ const Products = () => {
     const getAllProducts = async () => {
       try {
         dispatch(actions.showLoading());
-        const products = await productService.getAllProducts({ limit: 2, page: 0, sort: 'asc', filter: 'discount' });
+        const products = await productService.getAllProducts({ limit: 10, page: 0, sort: 'asc', filter: 'discount' });
         setProducts(products.productData);
       } catch (error) {
         messageApi.error(error.message);
@@ -100,19 +125,52 @@ const Products = () => {
   }, []);
 
   const createNewProduct = async (formValue) => {
+    const formData = new FormData();
     console.log({ ...formValue, fileList })
 
-    const formData = new FormData();
     for (const field in formValue) {
       formData.append(field, formValue[field])
     }
-    for (const field of fileList) {
-      formData.append("image", fileList[field])
-    }
+
+    fileList.forEach((file) => {
+      formData.append('images', file.originFileObj);
+    });
 
     try {
       const products = await productService.createProducts(formData);
-      console.log(products)
+      setIsCreate(false)
+      messageApi.open({
+        type: 'success',
+        content: 'Thêm thành công',
+      });
+      setFileList([])
+      reset()
+    } catch (error) {
+      messageApi.error(error.message);
+    };
+  }
+
+  const editProduct = async (formValue) => {
+    const formData = new FormData();
+    console.log({ ...formValue, fileList })
+
+    for (const field in formValue) {
+      formData.append(field, formValue[field])
+    }
+
+    fileList.forEach((file) => {
+      formData.append('images', file.originFileObj);
+    });
+
+    try {
+      const products = await productService.updateProducts(formData, idProduct);
+      setIsEdit(false)
+      messageApi.open({
+        type: 'success',
+        content: 'Cập nhật thành công',
+      });
+      setFileList([])
+      reset()
     } catch (error) {
       messageApi.error(error.message);
     };
@@ -125,7 +183,12 @@ const Products = () => {
           type='primary'
           size='large'
           icon={<PlusOutlined />}
-          onClick={() => setIsCreate(true)}>
+          onClick={() => {
+            setIsCreate(true)
+            reset()
+            setFileList([])
+
+          }}>
           Thêm sản phẩm
         </Button>
       </div>
@@ -142,6 +205,29 @@ const Products = () => {
         onSubmit={handleSubmit(createNewProduct)}>
         <AddProduct control={control} errors={errors} handleCancel={handleCancel} previewTitle={previewTitle} previewImage={previewImage} previewOpen={previewOpen} fileList={fileList} handleChange={handleChange} handlePreview={handlePreview} />
       </FormModal>
+      <FormModal
+        width={'50vw'}
+        isOpen={isEdit}
+        title='Chỉnh Sửa Sản Phẩm'
+        okBtnText='Chỉnh Sửa'
+        cancelBtnText='Xóa Sản Phẩm'
+        onCancel={async () => {
+          try {
+            const products = await productService.deleteProducts(idProduct);
+            setIsEdit(false)
+            messageApi.open({
+              type: 'success',
+              content: 'Xóa thành công',
+            });
+            setFileList([])
+            reset()
+          } catch (error) {
+            messageApi.error(error.message);
+          };
+        }}
+        onSubmit={handleSubmit(editProduct)}>
+        <AddProduct control={control} errors={errors} handleCancel={handleCancel} previewTitle={previewTitle} previewImage={previewImage} previewOpen={previewOpen} fileList={fileList} handleChange={handleChange} handlePreview={handlePreview} />
+      </FormModal >
     </>
   );
 };

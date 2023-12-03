@@ -24,7 +24,7 @@ export default function Login() {
       .catch((err) =>
         messageApi.open({
           type: 'error',
-          content: err.response.data.message,
+          content: err.response?.data.message,
         }),
       );
   };

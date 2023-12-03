@@ -3,7 +3,9 @@ import BaseService from "./base-service";
 class ProductService extends BaseService {
   constructor() {
     super('/api/product');
+
   }
+
 
   async getAllProducts(payload) {
     try {
@@ -20,20 +22,33 @@ class ProductService extends BaseService {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-      } );
+      });
       return data.data;
     } catch (error) {
       throw error;
     }
   }
-  // createMarker: async (payload) => {
-  //   const { data } = await axiosClient.post('/api/markers', payload, {
-  //     headers: {
-  //       'Content-Type': 'multipart/form-data',
-  //     },
-  //   });
-  //   return data.responseData;
-  // },
+
+  async updateProducts(payload, id) {
+    try {
+      const { data } = await this.axiosClient.put(`${this.path}/update/${id}`, payload, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return data.data;
+    } catch (error) {
+      throw error;
+    }
+  }
+  async deleteProducts(id) {
+    try {
+      const { data } = await this.axiosClient.delete(`${this.path}/delete/${id}`);
+      return data.data;
+    } catch (error) {
+      throw error;
+    }
+  }
 
 }
 
