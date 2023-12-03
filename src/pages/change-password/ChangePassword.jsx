@@ -12,7 +12,6 @@ export default function ChangePassword() {
     authService
       .changePass(values)
       .then((data) => {
-        console.log(data);
         messageApi.open({
           type: 'success',
           content: 'Cập nhật thành công',

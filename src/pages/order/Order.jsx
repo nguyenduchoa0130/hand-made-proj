@@ -83,7 +83,6 @@ function Order() {
     },
   ];
   const onSelectChange = (newSelectedRowKeys, selectedRows) => {
-    console.log('selectedRowKeys changed: ', newSelectedRowKeys, selectedRows);
     setSelectedRowKeys(newSelectedRowKeys);
     setSelectedRow(selectedRows);
   };

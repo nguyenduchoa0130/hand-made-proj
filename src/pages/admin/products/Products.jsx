@@ -37,7 +37,6 @@ const Products = () => {
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
   const openEditModal = (values) => {
 
-    console.log(values)
     setIsProduct(values._id)
     let dataImg = [];
     values.image.map(item => {
@@ -126,7 +125,6 @@ const Products = () => {
 
   const createNewProduct = async (formValue) => {
     const formData = new FormData();
-    console.log({ ...formValue, fileList })
 
     for (const field in formValue) {
       formData.append(field, formValue[field])
@@ -152,7 +150,6 @@ const Products = () => {
 
   const editProduct = async (formValue) => {
     const formData = new FormData();
-    console.log({ ...formValue, fileList })
 
     for (const field in formValue) {
       formData.append(field, formValue[field])

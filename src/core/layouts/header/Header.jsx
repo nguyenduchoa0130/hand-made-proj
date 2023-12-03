@@ -17,7 +17,6 @@ const Header = () => {
 
   const dataOrders = useSelector(selectListProduct);
   const userInfo = JSON.parse(localStorage.getItem('user'));
-  console.log(userInfo);
   const handleNavigate = (direction) => {
     navigate(direction);
   };
