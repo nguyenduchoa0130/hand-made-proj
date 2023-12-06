@@ -1,4 +1,4 @@
-import BaseService from "./base-service";
+import BaseService from './base-service';
 
 class AuthService extends BaseService {
   constructor() {
@@ -6,12 +6,10 @@ class AuthService extends BaseService {
   }
 
   async signIn(payload) {
-    try {
-      const { data } = await this.axiosClient.post(`${this.path}/sign-in`, payload);
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    const {
+      data: { data },
+    } = await this.axiosClient.post(`${this.path}/sign-in`, payload);
+    return data;
   }
 
   async signUp(payload) {

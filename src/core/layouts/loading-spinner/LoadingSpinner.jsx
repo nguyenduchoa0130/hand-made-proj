@@ -1,8 +1,8 @@
+import { Spin } from 'antd';
 import React from 'react';
-import styles from './styles.module.scss';
-import { ClockLoader } from 'react-spinners';
 import { useSelector } from 'react-redux';
 import { selectors } from '../../../stores';
+import styles from './styles.module.scss';
 
 const LoadingSpinner = () => {
   const isLoading = useSelector(selectors.selectIsLoading);
@@ -10,7 +10,7 @@ const LoadingSpinner = () => {
     <>
       {isLoading && (
         <div className={styles.spinner}>
-          <ClockLoader color='#36d7b7' loading={true} size='80' />
+          <Spin size='large' />
         </div>
       )}
     </>

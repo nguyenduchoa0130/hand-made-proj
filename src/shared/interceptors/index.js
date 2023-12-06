@@ -6,20 +6,14 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   (config) => {
-    // Get the token from wherever you store it (e.g., localStorage, cookies)
-    const token = JSON.parse(localStorage.getItem('user'));
-
-    // If a token exists, add it to the headers
-    if (token?.access_token) {
-      config.headers["x-access-token"] = token.access_token;
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user?.access_token) {
+      config.headers['x-access-token'] = user.access_token;
     }
-
     return config;
   },
   (error) => {
-    // Do something with request error
     return Promise.reject(error);
-  }
-); export default axiosClient;
-
-
+  },
+);
+export default axiosClient;

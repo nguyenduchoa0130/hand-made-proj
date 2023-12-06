@@ -3,34 +3,34 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../../shared/services/auth-service';
 import './style.scss';
+import { useDispatch } from 'react-redux';
+import { actions } from '../../../stores';
 
 export default function Login() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
 
-  const navigate = useNavigate();
-  const onFinish = (values) => {
-    authService
-      .signIn(values)
-      .then((data) => {
-        localStorage.setItem('user', JSON.stringify({ ...data, email: values.email }));
-        setTimeout(() => {
-          navigate('/');
-        }, 1000);
-        messageApi.open({
-          type: 'success',
-          content: 'Đăng nhập thành công',
-        });
-      })
-      .catch((err) =>
-        messageApi.open({
-          type: 'error',
-          content: err.response?.data.message,
-        }),
-      );
+  const handleLogin = async (values) => {
+    try {
+      dispatch(actions.showLoading());
+      const data = await authService.signIn(values);
+      localStorage.setItem('user', JSON.stringify({ ...data, email: values.email }));
+      messageApi.open({
+        type: 'success',
+        content: 'Đăng nhập thành công',
+      });
+      return navigate('/');
+    } catch (error) {
+      messageApi.open({
+        type: 'error',
+        content: error.response?.data?.message || error.message,
+      });
+    } finally {
+      dispatch(actions.hideLoading());
+    }
   };
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
+
   return (
     <div className='login'>
       {contextHolder}
@@ -47,23 +47,7 @@ export default function Login() {
           </h2>
         </div>
         <div className='login-form'>
-          <Form
-            name='basic'
-            labelCol={{
-              span: 4,
-            }}
-            wrapperCol={{
-              span: 20,
-            }}
-            style={{
-              maxWidth: 600,
-            }}
-            initialValues={{
-              remember: true,
-            }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete='off'>
+          <Form layout='vertical' name='basic' onFinish={handleLogin} autoComplete='off'>
             <Form.Item
               label='Email'
               name='email'
@@ -71,10 +55,10 @@ export default function Login() {
                 {
                   required: true,
                   type: 'email',
-                  message: 'Vui lòng nhập đúng email!',
+                  message: 'Vui lòng nhập email',
                 },
               ]}>
-              <Input size='large' />
+              <Input size='large' placeholder='Email' />
             </Form.Item>
 
             <Form.Item
@@ -86,7 +70,7 @@ export default function Login() {
                   message: 'Vui lòng nhập mật khẩu!',
                 },
               ]}>
-              <Input.Password size='large' />
+              <Input.Password size='large' placeholder='Mật khẩu' />
             </Form.Item>
 
             <Form.Item

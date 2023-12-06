@@ -1,13 +1,13 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Form, message } from 'antd';
+import { Button, message } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import DynamicTable from '../../../core/components/dynamic-table/DynamicTable';
+import FormModal from '../../../core/components/form-modal';
 import { productService } from '../../../shared/services/products.service';
 import { actions } from '../../../stores';
-import FormModal from '../../../core/components/form-modal';
 import AddProduct from './AddProduct';
-import { useForm } from 'react-hook-form';
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -25,7 +25,6 @@ const Products = () => {
   const [idProduct, setIsProduct] = useState();
   const [fileList, setFileList] = useState();
   const handleCancel = () => setPreviewOpen(false);
-  const user = JSON.parse(localStorage.getItem('user'));
   const handlePreview = async (file) => {
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
@@ -36,21 +35,20 @@ const Products = () => {
   };
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList);
   const openEditModal = (values) => {
-
-    setIsProduct(values._id)
+    setIsProduct(values._id);
     let dataImg = [];
-    values.image.map(item => {
-      dataImg.push({ url: item[0] })
-    })
+    values.image.forEach((item) => {
+      dataImg.push({ url: item[0] });
+    });
     reset({
       name: values.name,
       type: values.type,
       price: values.price,
       countInStock: values.countInStock,
-    })
-    setFileList(dataImg)
-    setIsEdit(true)
-  }
+    });
+    setFileList(dataImg);
+    setIsEdit(true);
+  };
   const {
     control,
     handleSubmit,
@@ -70,7 +68,6 @@ const Products = () => {
         title: 'Tên Sản Phẩm',
         dataIndex: 'name',
         key: 'name',
-
       },
       {
         title: 'Hinh ảnh',
@@ -101,7 +98,11 @@ const Products = () => {
         title: '',
         key: 'action',
         align: 'right',
-        render: (_, record) => <Button type='primary' onClick={() => openEditModal(record)}>Chi Tiết</Button>,
+        render: (_, record) => (
+          <Button type='primary' onClick={() => openEditModal(record)}>
+            Chi Tiết
+          </Button>
+        ),
       },
     ];
   }, []);
@@ -112,7 +113,12 @@ const Products = () => {
     const getAllProducts = async () => {
       try {
         dispatch(actions.showLoading());
-        const products = await productService.getAllProducts({ limit: 10, page: 0, sort: 'asc', filter: 'discount' });
+        const products = await productService.getAllProducts({
+          limit: 10,
+          page: 0,
+          sort: 'asc',
+          filter: 'discount',
+        });
         setProducts(products.productData);
       } catch (error) {
         messageApi.error(error.message);
@@ -127,7 +133,7 @@ const Products = () => {
     const formData = new FormData();
 
     for (const field in formValue) {
-      formData.append(field, formValue[field])
+      formData.append(field, formValue[field]);
     }
 
     fileList.forEach((file) => {
@@ -135,24 +141,24 @@ const Products = () => {
     });
 
     try {
-      const products = await productService.createProducts(formData);
-      setIsCreate(false)
+      await productService.createProducts(formData);
+      setIsCreate(false);
       messageApi.open({
         type: 'success',
         content: 'Thêm thành công',
       });
-      setFileList([])
-      reset()
+      setFileList([]);
+      reset();
     } catch (error) {
       messageApi.error(error.message);
-    };
-  }
+    }
+  };
 
   const editProduct = async (formValue) => {
     const formData = new FormData();
 
     for (const field in formValue) {
-      formData.append(field, formValue[field])
+      formData.append(field, formValue[field]);
     }
 
     fileList.forEach((file) => {
@@ -160,18 +166,18 @@ const Products = () => {
     });
 
     try {
-      const products = await productService.updateProducts(formData, idProduct);
-      setIsEdit(false)
+      await productService.updateProducts(formData, idProduct);
+      setIsEdit(false);
       messageApi.open({
         type: 'success',
         content: 'Cập nhật thành công',
       });
-      setFileList([])
-      reset()
+      setFileList([]);
+      reset();
     } catch (error) {
       messageApi.error(error.message);
-    };
-  }
+    }
+  };
   return (
     <>
       {contextHolder}
@@ -181,10 +187,9 @@ const Products = () => {
           size='large'
           icon={<PlusOutlined />}
           onClick={() => {
-            setIsCreate(true)
-            reset()
-            setFileList([])
-
+            setIsCreate(true);
+            reset();
+            setFileList([]);
           }}>
           Thêm sản phẩm
         </Button>
@@ -200,7 +205,17 @@ const Products = () => {
         cancelBtnText='Huỷ'
         onCancel={() => setIsCreate(false)}
         onSubmit={handleSubmit(createNewProduct)}>
-        <AddProduct control={control} errors={errors} handleCancel={handleCancel} previewTitle={previewTitle} previewImage={previewImage} previewOpen={previewOpen} fileList={fileList} handleChange={handleChange} handlePreview={handlePreview} />
+        <AddProduct
+          control={control}
+          errors={errors}
+          handleCancel={handleCancel}
+          previewTitle={previewTitle}
+          previewImage={previewImage}
+          previewOpen={previewOpen}
+          fileList={fileList}
+          handleChange={handleChange}
+          handlePreview={handlePreview}
+        />
       </FormModal>
       <FormModal
         width={'50vw'}
@@ -210,21 +225,31 @@ const Products = () => {
         cancelBtnText='Xóa Sản Phẩm'
         onCancel={async () => {
           try {
-            const products = await productService.deleteProducts(idProduct);
-            setIsEdit(false)
+            await productService.deleteProducts(idProduct);
+            setIsEdit(false);
             messageApi.open({
               type: 'success',
               content: 'Xóa thành công',
             });
-            setFileList([])
-            reset()
+            setFileList([]);
+            reset();
           } catch (error) {
             messageApi.error(error.message);
-          };
+          }
         }}
         onSubmit={handleSubmit(editProduct)}>
-        <AddProduct control={control} errors={errors} handleCancel={handleCancel} previewTitle={previewTitle} previewImage={previewImage} previewOpen={previewOpen} fileList={fileList} handleChange={handleChange} handlePreview={handlePreview} />
-      </FormModal >
+        <AddProduct
+          control={control}
+          errors={errors}
+          handleCancel={handleCancel}
+          previewTitle={previewTitle}
+          previewImage={previewImage}
+          previewOpen={previewOpen}
+          fileList={fileList}
+          handleChange={handleChange}
+          handlePreview={handlePreview}
+        />
+      </FormModal>
     </>
   );
 };

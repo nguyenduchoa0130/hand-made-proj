@@ -3,33 +3,31 @@ import './style.scss';
 import { Button, Form, Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../../shared/services/auth-service';
+import { useDispatch } from 'react-redux';
+import { actions } from '../../../stores';
 
 export default function Register() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
 
-  const onFinish = (values) => {
-    authService
-      .signUp(values)
-      .then((data) => {
-        setTimeout(() => {
-          navigate('/login');
-        }, 1000);
-        messageApi.open({
-          type: 'success',
-          content: 'Đăng ký thành công',
-        });
-      })
-      .catch((err) =>
-        messageApi.open({
-          type: 'error',
-          content: err.response.data.message,
-        }),
-      );
+  const onFinish = async (values) => {
+    try {
+      dispatch(actions.showLoading());
+      await authService.signUp(values);
+      messageApi.open({
+        type: 'success',
+        content: 'Đăng ký thành công',
+      });
+      return navigate('/login');
+    } catch (error) {
+      messageApi.open({
+        type: 'error',
+        content: error?.response?.data?.message || error.message,
+      });
+    }
   };
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
+
   return (
     <div className='login'>
       {contextHolder}
@@ -46,23 +44,7 @@ export default function Register() {
           </h2>
         </div>
         <div className='login-form'>
-          <Form
-            name='basic'
-            labelCol={{
-              span: 4,
-            }}
-            wrapperCol={{
-              span: 20,
-            }}
-            style={{
-              maxWidth: 600,
-            }}
-            initialValues={{
-              remember: true,
-            }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete='off'>
+          <Form name='basic' onFinish={onFinish} autoComplete='off' layout='vertical'>
             <Form.Item
               label='Tên'
               name='name'
@@ -72,7 +54,7 @@ export default function Register() {
                   message: 'Vui lòng nhập tên!',
                 },
               ]}>
-              <Input />
+              <Input size='large' />
             </Form.Item>
 
             <Form.Item
