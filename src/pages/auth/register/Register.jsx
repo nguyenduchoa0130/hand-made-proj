@@ -16,6 +16,7 @@ export default function Register() {
       dispatch(actions.showLoading());
       const user = await authService.signUp(values);
       localStorage.setItem('user', JSON.stringify(user));
+      dispatch(actions.setUser(user));
       messageApi.open({
         type: 'success',
         content: 'Đăng ký thành công',

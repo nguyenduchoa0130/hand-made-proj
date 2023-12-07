@@ -2,7 +2,16 @@ import { Form, Radio } from 'antd';
 import React from 'react';
 import { Controller } from 'react-hook-form';
 
-const FormRadioGroup = ({ label, error, name, control, rules, radioOptions = [] }) => {
+const LtFormRadioGroup = ({
+  name,
+  label,
+  error,
+  rules,
+  control,
+  children,
+  radioOptions = [],
+  ...others
+}) => {
   return (
     <>
       <Form.Item label={label} validateStatus={error ? 'error' : ''} help={error && error.message}>
@@ -11,7 +20,7 @@ const FormRadioGroup = ({ label, error, name, control, rules, radioOptions = [] 
           control={control}
           rules={rules}
           render={({ field }) => (
-            <Radio.Group {...field} size='large'>
+            <Radio.Group size='large' {...field} {...others}>
               {radioOptions.map((opt, idx) => (
                 <Radio key={`${name}-option-${idx}`} value={opt.value}>
                   {opt.label}
@@ -25,4 +34,4 @@ const FormRadioGroup = ({ label, error, name, control, rules, radioOptions = [] 
   );
 };
 
-export default FormRadioGroup;
+export default LtFormRadioGroup;

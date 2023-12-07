@@ -1,21 +1,45 @@
-import { Button, Form, Input, message } from 'antd';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { authService } from '../../../shared/services/auth-service';
-import './style.scss';
+import { Button, Form, message } from 'antd';
+import React, { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import { NavLink, useNavigate } from 'react-router-dom';
+import LtFormInput from '../../../core/components/lt-form-input';
+import { authService } from '../../../shared/services/auth-service';
 import { actions } from '../../../stores';
+import './style.scss';
+import LtFormCheckbox from '../../../core/components/lt-form-checkbox';
+import { QuestionOutlined } from '@ant-design/icons';
 
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
 
+  const {
+    reset,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+      isRememberPwd: false,
+    },
+  });
+
   const handleLogin = async (values) => {
     try {
       dispatch(actions.showLoading());
-      const data = await authService.signIn(values);
-      localStorage.setItem('user', JSON.stringify(data));
+      const { isRememberPwd, ...payload } = values;
+      const user = await authService.signIn(payload);
+      if (isRememberPwd) {
+        localStorage.setItem('savedUser', JSON.stringify(payload));
+      } else {
+        localStorage.removeItem('savedUser');
+      }
+      localStorage.setItem('user', JSON.stringify(user));
+      dispatch(actions.setUser(user));
       messageApi.open({
         type: 'success',
         content: 'Đăng nhập thành công',
@@ -30,6 +54,18 @@ export default function Login() {
       dispatch(actions.hideLoading());
     }
   };
+
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem('savedUser'));
+    console.log(savedUser);
+    if (savedUser) {
+      reset({
+        isRememberPwd: true,
+        email: savedUser.email,
+        password: savedUser.password,
+      });
+    }
+  }, []);
 
   return (
     <div className='login'>
@@ -47,49 +83,39 @@ export default function Login() {
           </h2>
         </div>
         <div className='login-form'>
-          <Form layout='vertical' name='basic' onFinish={handleLogin} autoComplete='off'>
-            <Form.Item
-              label='Email'
+          <Form layout='vertical' autoComplete='false' onFinish={handleSubmit(handleLogin)}>
+            <LtFormInput
               name='email'
-              rules={[
-                {
-                  required: true,
-                  type: 'email',
-                  message: 'Vui lòng nhập email',
-                },
-              ]}>
-              <Input size='large' placeholder='Email' />
-            </Form.Item>
-
-            <Form.Item
-              label='Mật Khẩu'
+              label='Email'
+              control={control}
+              error={errors.email}
+              placeholder='Nhập địa chỉ email'
+              rules={{ required: 'Địa chỉ email không được để trống' }}
+            />
+            <LtFormInput
+              isPassword
               name='password'
-              rules={[
-                {
-                  required: true,
-                  message: 'Vui lòng nhập mật khẩu!',
-                },
-              ]}>
-              <Input.Password size='large' placeholder='Mật khẩu' />
-            </Form.Item>
-
-            <Form.Item
-              wrapperCol={{
-                span: 24,
-              }}>
-              <div className='forgot' onClick={() => navigate('/forgot-password')}>
-                Quên mật khẩu?
+              label='Mật khẩu'
+              control={control}
+              error={errors.password}
+              placeholder='Nhập mật khẩu'
+              rules={{ required: 'Mật khẩu không được để trống' }}
+            />
+            <div className='form-group'>
+              <div className='d-flex align-items-center justify-content-between'>
+                <LtFormCheckbox name='isRememberPwd' control={control} text='Nhớ mật khẩu' />
+                <NavLink to='/quen-mat-khau'>
+                  <Button htmlType='button' icon={<QuestionOutlined />}>
+                    Quên mật khẩu
+                  </Button>
+                </NavLink>
               </div>
-              <div style={{ textAlign: 'center' }}>
-                <Button
-                  type='primary'
-                  size='large'
-                  htmlType='submit'
-                  style={{ marginRight: '10px' }}>
-                  Đăng Nhập
-                </Button>
-              </div>
-            </Form.Item>
+            </div>
+            <div className='form-group'>
+              <Button htmlType='submit' size='large' type='primary' className='w-100'>
+                Đăng Nhập
+              </Button>
+            </div>
           </Form>
         </div>
       </div>

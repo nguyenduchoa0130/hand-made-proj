@@ -2,24 +2,26 @@ import { Button, Modal } from 'antd';
 import React from 'react';
 
 const FormModal = ({
-  isOpen,
   title,
   width,
+  isOpen,
   children,
-  cancelBtnText,
   okBtnText,
+  cancelBtnText,
   onCancel = () => {},
   onSubmit = () => {},
+  ...others
 }) => {
   return (
     <>
       <Modal
+        centered
         open={isOpen}
-        title={title || 'Modal title'}
         footer={null}
         onCancel={onCancel}
-        centered
-        width={width || 520}>
+        width={width || 520}
+        title={title || 'Modal title'}
+        {...others}>
         <hr />
         {children}
         <hr />

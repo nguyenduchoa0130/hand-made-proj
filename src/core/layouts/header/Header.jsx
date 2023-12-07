@@ -1,7 +1,7 @@
 import { Avatar, Button, Dropdown, message } from 'antd';
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import React, { useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { NavLink, useNavigate } from 'react-router-dom';
 import BagIcon from '../../../assets/icon/bagIcon.svg';
 import LogoutIcon from '../../../assets/icon/logoutIcon.svg';
 import NoteIcon from '../../../assets/icon/noteIcon.svg';
@@ -10,47 +10,53 @@ import AvatarIcon from '../../../assets/img/avatar-2.png';
 import Logo from '../../../assets/img/logo.svg';
 import { selectListProduct } from '../../../stores/global/global.selectors';
 import './style.scss';
+import { actions } from '../../../stores';
 
 const Header = () => {
   const navigate = useNavigate();
-  const [messageApi, contextHolder] = message.useMessage();
-
+  const dispatch = useDispatch();
   const dataOrders = useSelector(selectListProduct);
   const userInfo = JSON.parse(localStorage.getItem('user'));
+
   const handleNavigate = (direction) => {
     navigate(direction);
   };
-  const items = [
-    {
-      key: '1',
-      label: (
-        <div
-          onClick={() => {
-            handleNavigate('/thong-tin-ca-nhan');
-          }}>
-          Thông tin cá nhân
-        </div>
-      ),
-    },
-    {
-      key: '2',
-      label: (
-        <div
-          onClick={() => {
-            localStorage.removeItem('user');
-            handleNavigate('/');
-          }}>
-          Đăng xuất
-        </div>
-      ),
-    },
-  ];
+
+  const items = useMemo(() => {
+    return [
+      {
+        key: '1',
+        label: (
+          <div
+            onClick={() => {
+              return handleNavigate('/thong-tin-ca-nhan');
+            }}>
+            Thông tin cá nhân
+          </div>
+        ),
+      },
+      {
+        key: '2',
+        label: (
+          <div
+            onClick={() => {
+              localStorage.removeItem('user');
+              dispatch(actions.resetUser());
+              return handleNavigate('/');
+            }}>
+            Đăng xuất
+          </div>
+        ),
+      },
+    ];
+  }, []);
 
   return (
     <>
       <header>
-        {contextHolder}
-        <img src={Logo} alt='logo' style={{ width: '210px', height: '150px' }} />
+        <NavLink to='/'>
+          <img src={Logo} alt='logo' style={{ width: '210px', height: '150px' }} />
+        </NavLink>
         <div className='header-container'>
           <div className='up'>
             <div className='input'>

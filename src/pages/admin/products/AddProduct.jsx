@@ -1,6 +1,6 @@
 import { Form, Modal, Upload } from 'antd';
 import React from 'react';
-import FormInput from '../../../core/components/form-input';
+import LtFormInput from '../../../core/components/lt-form-input';
 
 const AddProduct = ({
   control,
@@ -27,14 +27,14 @@ const AddProduct = ({
   return (
     <>
       <Form layout='vertical'>
-        <FormInput
+        <LtFormInput
           label='Tên sản phẩm'
           control={control}
           name='name'
           placeholder='Tên sản phẩm'
           error={errors.ten_chi_nhanh}
         />
-        <FormInput
+        <LtFormInput
           label='Loại sản phẩm'
           control={control}
           name='type'
@@ -58,14 +58,14 @@ const AddProduct = ({
             src={previewImage}
           />
         </Modal>
-        <FormInput
+        <LtFormInput
           label='Giá'
           control={control}
           name='price'
           placeholder='Giá'
           error={errors.thanh_pho}
         />
-        <FormInput
+        <LtFormInput
           label='Số lượng'
           control={control}
           name='countInStock'

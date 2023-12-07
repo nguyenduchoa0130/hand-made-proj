@@ -1,8 +1,18 @@
 import { Form, Input } from 'antd';
-import React, { memo } from 'react';
+import React from 'react';
 import { Controller } from 'react-hook-form';
 
-const FormInput = ({ label, error, control, name, placeholder, rules, isPassword }) => {
+const LtFormInput = ({
+  label,
+  error,
+  name,
+  rules,
+  control,
+  children,
+  placeholder,
+  isPassword,
+  ...others
+}) => {
   return (
     <>
       <Form.Item label={label} validateStatus={error ? 'error' : ''} help={error && error.message}>
@@ -12,9 +22,9 @@ const FormInput = ({ label, error, control, name, placeholder, rules, isPassword
           control={control}
           render={({ field }) =>
             isPassword ? (
-              <Input.Password placeholder={placeholder} {...field} size='large' />
+              <Input.Password placeholder={placeholder} {...field} size='large' {...others} />
             ) : (
-              <Input placeholder={placeholder} {...field} size='large' />
+              <Input placeholder={placeholder} {...field} size='large' {...others} />
             )
           }
         />
@@ -23,4 +33,4 @@ const FormInput = ({ label, error, control, name, placeholder, rules, isPassword
   );
 };
 
-export default memo(FormInput);
+export default LtFormInput;

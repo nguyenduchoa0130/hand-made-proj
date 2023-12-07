@@ -1,108 +1,73 @@
-import { Avatar, Button, Form, Input, message } from 'antd';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import AvatarIcon from '../../assets/img/avatar-2.png';
-import { setUser } from '../../stores/global/global.actions';
+import { Avatar, Button, Form, message } from 'antd';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import './style.scss';
+import { useForm } from 'react-hook-form';
+import LtFormInput from '../../core/components/lt-form-input';
+import { selectors } from '../../stores';
+import { UploadOutlined } from '@ant-design/icons';
 
 const Information = () => {
-  const [isEdit, setIsEdit] = useState(false);
-  const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
-  const userInfo = JSON.parse(localStorage.getItem('user'));
+  const [messageApi, contextHolder] = message.useMessage();
+  const userInfo = useSelector(selectors.selectUserInfo);
 
-  const onFinish = (values) => {
-    dispatch(setUser(values));
-    messageApi.open({
-      type: 'success',
-      content: 'Cập nhật thành công',
+  console.log(userInfo);
+
+  const {
+    reset,
+    watch,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: '',
+      password: '',
+      passwordConfirm: '',
+      name: '',
+      phone: '',
+      address: '',
+    },
+  });
+
+  useEffect(() => {
+    reset({
+      email: userInfo.email,
+      password: '',
+      passwordConfirm: '',
+      name: userInfo.name,
+      phone: userInfo.phone,
+      address: userInfo.address,
     });
-    setIsEdit(false);
-  };
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
+  }, []);
+
   return (
-    <div className='information'>
+    <div className='container'>
       {contextHolder}
-      <h2 className='title'>Thông tin cá nhân</h2>
-      <div className='information-content'>
-        <div>
-          <Avatar src={AvatarIcon} style={{ width: 300, height: 300 }} />
+      <div className='py-3'>
+        <h2 className='text-center'>THÔNG TIN CÁ NHÂN</h2>
+      </div>
+      <hr />
+      <div className='row'>
+        <div className='col-md-4 col-xs-12'>
+          <div className='text-center'>
+            <Avatar />
+            <div className='pt-3'>
+              <Button size='large' icon={<UploadOutlined />}>
+                Tải ảnh lên
+              </Button>
+            </div>
+          </div>
         </div>
-        <div>
-          <Form
-            name='basic'
-            labelCol={{
-              span: 8,
-            }}
-            wrapperCol={{
-              span: 16,
-            }}
-            style={{
-              maxWidth: 600,
-            }}
-            initialValues={{
-              remember: true,
-            }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete='off'>
-            <Form.Item
-              label='Email'
-              name='email'
-              initialValue={userInfo.email}
-              rules={[
-                {
-                  required: true,
-                  type: 'email',
-                  message: 'Vui lòng nhập đúng email!',
-                },
-              ]}>
-              <Input size='large' style={{ width: 500 }} disabled={!isEdit} />
-            </Form.Item>
-
-            <Form.Item
-              label='Mật Khẩu'
-              name='password'
-              initialValue={userInfo.password}
-              rules={[
-                {
-                  required: true,
-                  message: 'Vui lòng nhập mật khẩu!',
-                },
-              ]}>
-              <Input.Password size='large' style={{ width: 500 }} disabled={!isEdit} />
-            </Form.Item>
-
-            <Form.Item
-              wrapperCol={{
-                offset: 8,
-                span: 16,
-              }}>
-              {isEdit ? (
-                <>
-                  <div style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button
-                      type='primary'
-                      size='large'
-                      htmlType='submit'
-                      style={{ marginRight: '10px' }}>
-                      Cập Nhật
-                    </Button>
-                    <Button type='dashed' size='large' onClick={() => setIsEdit(false)}>
-                      Hủy
-                    </Button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <Button type='primary' size='large' onClick={() => setIsEdit(true)}>
-                    Sửa
-                  </Button>
-                </>
-              )}
-            </Form.Item>
+        <div className='col-md-8 col-xs-12 border-left'>
+          <Form layout='vertical'>
+            <LtFormInput label='Email' name='email' control={control} />
+            <LtFormInput label='Mật khẩu' name='password' control={control} />
+            <LtFormInput label='Xác nhận mật khẩu' name='passwordConfirm' control={control} />
+            <LtFormInput label='Họ và tên' name='name' control={control} />
+            <LtFormInput label='Số điện thoại' name='phone' control={control} />
+            <LtFormInput label='Địa chỉ' name='address' control={control} />
           </Form>
         </div>
       </div>
