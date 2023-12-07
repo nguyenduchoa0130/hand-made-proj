@@ -1,13 +1,18 @@
-.login {
+.register {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 70vh;
   background-color: #fff2f2;
+  height: 100%;
+  background: url('https://images.unsplash.com/photo-1516007415177-af5e62c69ebe?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 
-  .login-title {
+  .register-title {
     display: flex;
     align-items: center;
+    text-transform: uppercase;
     margin-bottom: 30px;
 
     .title {
@@ -15,22 +20,26 @@
       width: 50%;
       margin: 0;
       cursor: pointer;
-      background-color: rgb(219, 219, 219);
+      background-color: #74abfa;
       padding: 20px;
       font-size: 20px;
     }
 
     .active {
       background-color: rgb(190, 190, 190);
+      background-color: #74abfa;
+      color: #fff;
+      font-weight: 600;
     }
   }
 
-  .login-container {
+  .register-container {
     background-color: white;
     border-radius: 10px;
     width: 600px;
+    box-shadow: 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
 
-    .login-form {
+    .register-form {
       padding: 0 20px;
     }
   }

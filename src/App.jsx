@@ -50,7 +50,7 @@ const App = () => {
           element: <LazyComponent component={<Information />} />,
         },
         {
-          path: 'forgot-password',
+          path: 'quen-mat-khau',
           element: <LazyComponent component={<ForgotPassword />} />,
         },
         {

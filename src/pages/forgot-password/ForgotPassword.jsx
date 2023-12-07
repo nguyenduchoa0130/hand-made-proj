@@ -1,92 +1,85 @@
-import { Button, Form, Input, message } from 'antd';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { authService } from '../../shared/services/auth-service';
+import { ArrowLeftOutlined } from '@ant-design/icons';
+import { Alert, Button, Form, message } from 'antd';
+import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import LtFormInput from '../../core/components/lt-form-input';
+import { actions, selectors } from '../../stores';
 import './style.scss';
+import { authService } from '../../shared/services/auth-service';
 
 export default function ForgotPassword() {
+  const [isResend, setIsResend] = useState(false);
+
+  const dispatch = useDispatch();
+  const isLoading = useSelector(selectors.selectIsLoading);
   const [messageApi, contextHolder] = message.useMessage();
 
-  const navigate = useNavigate();
-  const onFinish = (values) => {
-    authService
-      .forgotPass(values)
-      .then((data) => {
-        messageApi.open({
-          type: 'success',
-          content: data.message,
-        });
-      })
-      .catch((err) =>
-        messageApi.open({
-          type: 'error',
-          content: err.response.data.message,
-        }),
-      );
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ defaultValues: { email: '' } });
+
+  const handleResetPassword = async (values) => {
+    try {
+      setIsResend(false);
+      dispatch(actions.showLoading());
+      await authService.forgotPass(values);
+      setIsResend(true);
+    } catch (error) {
+      messageApi.error(error?.response?.data?.message || error.message);
+    } finally {
+      dispatch(actions.hideLoading());
+    }
   };
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
+
   return (
-    <div className='login'>
+    <div className='forgot-password'>
       {contextHolder}
-      <div className='login-container'>
-        <div className='login-title'>
+      <div className='forgot-password-container'>
+        <div className='forgot-password-title'>
           <h2 className='title active'>Quên Mật Khẩu</h2>
         </div>
-        <div className='login-form'>
-          <Form
-            name='basic'
-            labelCol={{
-              span: 4,
-            }}
-            wrapperCol={{
-              span: 20,
-            }}
-            style={{
-              maxWidth: 600,
-            }}
-            initialValues={{
-              remember: true,
-            }}
-            onFinish={onFinish}
-            onFinishFailed={onFinishFailed}
-            autoComplete='off'>
-            <Form.Item
+        <div className='forgot-password-form'>
+          <Form layout='vertical' onFinish={handleSubmit(handleResetPassword)}>
+            <LtFormInput
               label='Email'
               name='email'
-              rules={[
-                {
-                  required: true,
-                  type: 'email',
-                  message: 'Vui lòng nhập đúng email!',
+              control={control}
+              error={errors.email}
+              placeholder='Nhập địa chỉ email'
+              rules={{
+                required: 'Không được để trống',
+                pattern: {
+                  value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                  message: 'Email không hợp lệ',
                 },
-              ]}>
-              <Input size='large' />
-            </Form.Item>
-
-            <Form.Item
-              wrapperCol={{
-                span: 24,
-              }}>
-              <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                <Button
-                  type='default'
-                  size='large'
-                  style={{ marginRight: '10px' }}
-                  onClick={() => navigate('/login')}>
-                  Quay lại
-                </Button>
-                <Button
-                  type='primary'
-                  size='large'
-                  htmlType='submit'
-                  style={{ marginRight: '10px' }}>
-                  Gửi
-                </Button>
+              }}
+            />
+            {isResend && (
+              <div className='pb-3'>
+                <Alert
+                  type='success'
+                  message='Chúng tôi đã gửi một email tới hộp thư của bạn, vui lòng kiểm tra nó'
+                />
               </div>
-            </Form.Item>
+            )}
+            {!isLoading && (
+              <Button size='large' type='primary' className='w-100' htmlType='submit'>
+                {isResend ? 'Gửi lại' : 'Gửi'}
+              </Button>
+            )}
           </Form>
+          <hr />
+          <div className='pb-3'>
+            <NavLink to='/dang-nhap'>
+              <Button size='large' icon={<ArrowLeftOutlined />}>
+                Quay lại đăng nhập
+              </Button>
+            </NavLink>
+          </div>
         </div>
       </div>
     </div>

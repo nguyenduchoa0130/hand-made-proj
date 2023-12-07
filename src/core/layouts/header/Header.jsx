@@ -1,4 +1,4 @@
-import { Avatar, Button, Dropdown, message } from 'antd';
+import { Avatar, Button, Dropdown, Tooltip } from 'antd';
 import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -8,15 +8,13 @@ import NoteIcon from '../../../assets/icon/noteIcon.svg';
 import SearchIcon from '../../../assets/icon/searchIcon.svg';
 import AvatarIcon from '../../../assets/img/avatar-2.png';
 import Logo from '../../../assets/img/logo.svg';
-import { selectListProduct } from '../../../stores/global/global.selectors';
+import { actions, selectors } from '../../../stores';
 import './style.scss';
-import { actions } from '../../../stores';
 
 const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const dataOrders = useSelector(selectListProduct);
-  const userInfo = JSON.parse(localStorage.getItem('user'));
+  const userInfo = useSelector(selectors.selectUserInfo);
 
   const handleNavigate = (direction) => {
     navigate(direction);
@@ -67,22 +65,24 @@ const Header = () => {
             </div>
             {!userInfo ? (
               <>
-                <div className='icon-up icon-store' onClick={() => handleNavigate('/order')}>
-                  <img src={BagIcon} alt='logo' />
-                  <div className='number-order'>{dataOrders.length}</div>
-                </div>
-                <div className='icon-up' onClick={() => handleNavigate('/dang-nhap')}>
-                  <img src={LogoutIcon} alt='logo' />
-                </div>
+                <Tooltip title='Đăng nhập/Đăng ký'>
+                  <div className='icon-up' onClick={() => handleNavigate('/dang-nhap')}>
+                    <img src={LogoutIcon} alt='logo' />
+                  </div>
+                </Tooltip>
               </>
             ) : (
               <>
-                <div className='icon-up' onClick={() => handleNavigate('/order')}>
-                  <img src={BagIcon} alt='logo' />
-                </div>
-                <div className='icon-up'>
-                  <img src={NoteIcon} alt='logo' />
-                </div>
+                <Tooltip title='Giỏ hàng'>
+                  <div className='icon-up' onClick={() => handleNavigate('/order')}>
+                    <img src={BagIcon} alt='logo' />
+                  </div>
+                </Tooltip>
+                <Tooltip title='Đơn hàng'>
+                  <div className='icon-up'>
+                    <img src={NoteIcon} alt='logo' />
+                  </div>
+                </Tooltip>
                 <div className='icon-up'>
                   <Dropdown
                     menu={{

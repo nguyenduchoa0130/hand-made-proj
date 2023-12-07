@@ -1,11 +1,11 @@
+import { UploadOutlined } from '@ant-design/icons';
 import { Avatar, Button, Form, message } from 'antd';
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import './style.scss';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 import LtFormInput from '../../core/components/lt-form-input';
 import { selectors } from '../../stores';
-import { UploadOutlined } from '@ant-design/icons';
+import './style.scss';
 
 const Information = () => {
   const dispatch = useDispatch();

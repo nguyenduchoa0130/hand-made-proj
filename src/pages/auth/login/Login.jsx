@@ -90,7 +90,7 @@ export default function Login() {
               control={control}
               error={errors.email}
               placeholder='Nhập địa chỉ email'
-              rules={{ required: 'Địa chỉ email không được để trống' }}
+              rules={{ required: 'Không được để trống' }}
             />
             <LtFormInput
               isPassword
@@ -99,7 +99,7 @@ export default function Login() {
               control={control}
               error={errors.password}
               placeholder='Nhập mật khẩu'
-              rules={{ required: 'Mật khẩu không được để trống' }}
+              rules={{ required: 'Không được để trống' }}
             />
             <div className='form-group'>
               <div className='d-flex align-items-center justify-content-between'>
