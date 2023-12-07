@@ -26,7 +26,7 @@ const Header = () => {
       label: (
         <div
           onClick={() => {
-            handleNavigate('/information');
+            handleNavigate('/thong-tin-ca-nhan');
           }}>
           Thông tin cá nhân
         </div>
@@ -37,23 +37,8 @@ const Header = () => {
       label: (
         <div
           onClick={() => {
-            handleNavigate('/change-password');
-          }}>
-          Đổi mật khẩu
-        </div>
-      ),
-    },
-    {
-      key: '3',
-      label: (
-        <div
-          onClick={() => {
             localStorage.removeItem('user');
             handleNavigate('/');
-            messageApi.open({
-              type: 'success',
-              content: 'Đăng xuất thành công',
-            });
           }}>
           Đăng xuất
         </div>
@@ -80,7 +65,7 @@ const Header = () => {
                   <img src={BagIcon} alt='logo' />
                   <div className='number-order'>{dataOrders.length}</div>
                 </div>
-                <div className='icon-up' onClick={() => handleNavigate('/login')}>
+                <div className='icon-up' onClick={() => handleNavigate('/dang-nhap')}>
                   <img src={LogoutIcon} alt='logo' />
                 </div>
               </>
@@ -106,16 +91,16 @@ const Header = () => {
             )}
           </div>
           <div className='down'>
-            <Button type='primary' size={'large'} onClick={() => handleNavigate('/')}>
+            <Button type='primary' size='large' onClick={() => handleNavigate('/')}>
               Trang chủ
             </Button>
-            <Button type='primary' size={'large'} onClick={() => handleNavigate('/store')}>
+            <Button type='primary' size='large' onClick={() => handleNavigate('/cua-hang')}>
               Cửa hàng
             </Button>
-            <Button type='primary' size={'large'} onClick={() => handleNavigate('/intro')}>
+            <Button type='primary' size='large' onClick={() => handleNavigate('/ve-chung-toi')}>
               Giới thiệu
             </Button>
-            <Button type='primary' size={'large'}>
+            <Button type='primary' size='large'>
               Mã giảm giá
             </Button>
           </div>

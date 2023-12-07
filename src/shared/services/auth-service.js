@@ -13,12 +13,10 @@ class AuthService extends BaseService {
   }
 
   async signUp(payload) {
-    try {
-      const { data } = await this.axiosClient.post(`${this.path}/sign-up`, payload);
-      return data;
-    } catch (error) {
-      throw error;
-    }
+    const {
+      data: { data },
+    } = await this.axiosClient.post(`${this.path}/sign-up`, payload);
+    return data;
   }
 
   async changePass(payload) {

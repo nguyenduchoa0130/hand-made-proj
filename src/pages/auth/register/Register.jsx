@@ -11,20 +11,23 @@ export default function Register() {
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
 
-  const onFinish = async (values) => {
+  const handleRegister = async (values) => {
     try {
       dispatch(actions.showLoading());
-      await authService.signUp(values);
+      const user = await authService.signUp(values);
+      localStorage.setItem('user', JSON.stringify(user));
       messageApi.open({
         type: 'success',
         content: 'Đăng ký thành công',
       });
-      return navigate('/login');
+      return navigate('/');
     } catch (error) {
       messageApi.open({
         type: 'error',
         content: error?.response?.data?.message || error.message,
       });
+    } finally {
+      dispatch(actions.hideLoading());
     }
   };
 
@@ -36,7 +39,7 @@ export default function Register() {
           <h2
             className='title'
             style={{ borderTopLeftRadius: '10px' }}
-            onClick={() => navigate('/login')}>
+            onClick={() => navigate('/dang-nhap')}>
             Đăng Nhập
           </h2>
           <h2 className='title active' style={{ borderTopRightRadius: '10px' }}>
@@ -44,7 +47,7 @@ export default function Register() {
           </h2>
         </div>
         <div className='login-form'>
-          <Form name='basic' onFinish={onFinish} autoComplete='off' layout='vertical'>
+          <Form name='basic' onFinish={handleRegister} autoComplete='off' layout='vertical'>
             <Form.Item
               label='Tên'
               name='name'

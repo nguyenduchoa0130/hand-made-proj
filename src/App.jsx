@@ -38,39 +38,35 @@ const App = () => {
           element: <Home />,
         },
         {
-          path: 'login',
+          path: 'dang-nhap',
           element: <LazyComponent component={<Login />} />,
         },
         {
-          path: 'register',
+          path: 'dang-ky',
           element: <LazyComponent component={<Register />} />,
         },
         {
-          path: 'information',
+          path: 'thong-tin-ca-nhan',
           element: <LazyComponent component={<Information />} />,
-        },
-        {
-          path: 'change-password',
-          element: <LazyComponent component={<ChangePassword />} />,
         },
         {
           path: 'forgot-password',
           element: <LazyComponent component={<ForgotPassword />} />,
         },
         {
-          path: 'store',
+          path: 'cua-hang',
           element: <LazyComponent component={<Store />} />,
         },
         {
-          path: 'intro',
+          path: 've-chung-toi',
           element: <LazyComponent component={<Intro />} />,
         },
         {
-          path: 'order',
+          path: 'don-hang',
           element: <LazyComponent component={<Order />} />,
         },
         {
-          path: 'detail/:id',
+          path: 'san-pham/:id',
           element: <LazyComponent component={<Detail />} />,
         },
       ],

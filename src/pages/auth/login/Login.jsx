@@ -15,7 +15,7 @@ export default function Login() {
     try {
       dispatch(actions.showLoading());
       const data = await authService.signIn(values);
-      localStorage.setItem('user', JSON.stringify({ ...data, email: values.email }));
+      localStorage.setItem('user', JSON.stringify(data));
       messageApi.open({
         type: 'success',
         content: 'Đăng nhập thành công',
@@ -42,7 +42,7 @@ export default function Login() {
           <h2
             className='title'
             style={{ borderTopRightRadius: '10px' }}
-            onClick={() => navigate('/register')}>
+            onClick={() => navigate('/dang-ky')}>
             Đăng Ký
           </h2>
         </div>
