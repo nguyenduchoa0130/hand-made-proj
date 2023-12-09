@@ -5,9 +5,9 @@ class ProductService extends BaseService {
     super('/api/product');
   }
 
-  async getAllProducts(payload) {
+  async getAllProducts(params) {
     try {
-      const { data } = await this.axiosClient.get(`${this.path}/get-all`, { params: payload });
+      const { data } = await this.axiosClient.get(`${this.path}/get-all`, { params });
       return data.data;
     } catch (error) {
       throw error;

@@ -11,6 +11,7 @@ const LtFormDropdown = ({
   placeholder,
   dropdownOptions,
   hasSearch,
+  isMultiple,
 }) => {
   return (
     <>
@@ -21,11 +22,12 @@ const LtFormDropdown = ({
           rules={rules}
           render={({ field }) => (
             <Select
-              {...field}
+              mode={isMultiple && 'multiple'}
               placeholder={placeholder}
               options={dropdownOptions}
               showSearch={hasSearch}
               size='large'
+              {...field}
             />
           )}
         />

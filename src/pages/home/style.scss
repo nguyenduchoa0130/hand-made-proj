@@ -24,10 +24,10 @@
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 24px;
 
     .product-type {
       position: relative;
+      margin: 0 24px;
 
       display: flex;
       flex-direction: column;

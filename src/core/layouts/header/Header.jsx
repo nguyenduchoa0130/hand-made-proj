@@ -101,7 +101,7 @@ const Header = () => {
               Trang chủ
             </Button>
             <Button type='primary' size='large' onClick={() => handleNavigate('/cua-hang')}>
-              Cửa hàng
+              Sản phẩm
             </Button>
             <Button type='primary' size='large' onClick={() => handleNavigate('/ve-chung-toi')}>
               Giới thiệu
