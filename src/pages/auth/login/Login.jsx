@@ -68,7 +68,7 @@ export default function Login() {
   }, []);
 
   return (
-    <div className='login'>
+    <div className='login layout-height'>
       {contextHolder}
       <div className='login-container'>
         <div className='login-title'>

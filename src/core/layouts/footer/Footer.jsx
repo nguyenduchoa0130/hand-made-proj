@@ -29,19 +29,19 @@ const Footer = () => {
           <div className='location'>
             <img src={locationIcon} alt='locationIcon' />
             <span>
-              số 165, đường Lê Ngã, Phường Bình Khánh, thành phố Long Xuyên, tỉnh An Giang
+              Số 165, đường Lê Ngã, Phường Bình Khánh, thành phố Long Xuyên, tỉnh An Giang
             </span>
           </div>
           <div className='location'>
             <img src={locationIcon} alt='locationIcon' />
             <span>
-              số 1, đường Võ Văn Ngân, phường Linh Chiểu, thành phố Thủ Đức, thành phố Hồ Chí Minh
+              Số 1, đường Võ Văn Ngân, phường Linh Chiểu, thành phố Thủ Đức, thành phố Hồ Chí Minh
             </span>
           </div>
           <div className='location'>
             <img src={locationIcon} alt='locationIcon' />
             <span>
-              số 414, đường Huỳnh Văn Bánh, phường 13 , quận Phú Nhuận, thành phố Hồ Chí Minh
+              Số 414, đường Huỳnh Văn Bánh, phường 13 , quận Phú Nhuận, thành phố Hồ Chí Minh
             </span>
           </div>
         </div>

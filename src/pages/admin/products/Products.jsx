@@ -3,11 +3,12 @@ import { Button, message } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import DynamicTable from '../../../core/components/dynamic-table/DynamicTable';
-import FormModal from '../../../core/components/form-modal';
+import LtFormModal from '../../../core/components/lt-form-modal';
+import LtDynamicTable from '../../../core/components/lt-dynamic-table/LtDynamicTable';
 import { productService } from '../../../shared/services/products.service';
 import { actions } from '../../../stores';
 import AddProduct from './AddProduct';
+
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -15,6 +16,7 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
+
 const Products = () => {
   const [isCreate, setIsCreate] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -121,7 +123,7 @@ const Products = () => {
         });
         setProducts(products.productData);
       } catch (error) {
-        messageApi.error(error.message);
+        messageApi.error(error?.response?.data?.message || error.message);
       } finally {
         dispatch(actions.hideLoading());
       }
@@ -195,9 +197,9 @@ const Products = () => {
         </Button>
       </div>
       <div className='pt-3'>
-        <DynamicTable cols={tableColumns} dataSrc={products} hasFilters />
+        <LtDynamicTable cols={tableColumns} dataSrc={products} hasFilters />
       </div>
-      <FormModal
+      <LtFormModal
         width={'50vw'}
         isOpen={isCreate}
         title='Thêm Sản Phẩm'
@@ -216,8 +218,8 @@ const Products = () => {
           handleChange={handleChange}
           handlePreview={handlePreview}
         />
-      </FormModal>
-      <FormModal
+      </LtFormModal>
+      <LtFormModal
         width={'50vw'}
         isOpen={isEdit}
         title='Chỉnh Sửa Sản Phẩm'
@@ -249,7 +251,7 @@ const Products = () => {
           handleChange={handleChange}
           handlePreview={handlePreview}
         />
-      </FormModal>
+      </LtFormModal>
     </>
   );
 };

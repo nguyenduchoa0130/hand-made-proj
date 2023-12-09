@@ -75,3 +75,7 @@ a {
 span[role='img'] {
   vertical-align: middle;
 }
+
+.layout-height {
+  min-height: calc(100vh - 160px);
+}

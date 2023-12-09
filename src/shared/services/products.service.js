@@ -1,11 +1,9 @@
-import BaseService from "./base-service";
+import BaseService from './base-service';
 
 class ProductService extends BaseService {
   constructor() {
     super('/api/product');
-
   }
-
 
   async getAllProducts(payload) {
     try {
@@ -49,7 +47,6 @@ class ProductService extends BaseService {
       throw error;
     }
   }
-
 }
 
 export const productService = new ProductService();

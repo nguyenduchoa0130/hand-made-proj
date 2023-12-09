@@ -1,8 +1,8 @@
 import { InfoCircleOutlined } from '@ant-design/icons';
 import { Button, Tag, message } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
-import DynamicTable from '../../../core/components/dynamic-table/DynamicTable';
-import { UserService } from '../../../shared/services';
+import LtDynamicTable from '../../../core/components/lt-dynamic-table/';
+import UserService from '../../../shared/services/users.service';
 import { useDispatch } from 'react-redux';
 import { actions } from '../../../stores';
 
@@ -77,7 +77,7 @@ const Users = () => {
   return (
     <>
       {contextHolder}
-      <DynamicTable
+      <LtDynamicTable
         cols={tableColumns}
         dataSrc={users}
         hasFilters={true}

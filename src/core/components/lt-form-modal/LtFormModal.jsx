@@ -1,7 +1,7 @@
 import { Button, Modal } from 'antd';
 import React from 'react';
 
-const FormModal = ({
+const LtFormModal = ({
   title,
   width,
   isOpen,
@@ -38,4 +38,4 @@ const FormModal = ({
   );
 };
 
-export default FormModal;
+export default LtFormModal;

@@ -1,9 +1,9 @@
 import { Input, Table } from 'antd';
-import { memo, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import { useDebounce } from '../../../shared/hooks';
 
-const DynamicTable = ({
+const LtDynamicTable = ({
   cols,
   dataSrc = [],
   hasFilters = false,
@@ -48,7 +48,7 @@ const DynamicTable = ({
           rowKey={rowKey}
           columns={cols}
           dataSource={filteredData}
-          pagination={{ position: ['bottomRight'], pageSize }}
+          pagination={{ position: ['bottomRight'], pageSize, hideOnSinglePage: true }}
           bordered={hasBorder}
         />
       </div>
@@ -56,4 +56,4 @@ const DynamicTable = ({
   );
 };
 
-export default memo(DynamicTable);
+export default LtDynamicTable;

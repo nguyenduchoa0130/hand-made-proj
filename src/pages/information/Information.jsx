@@ -43,34 +43,31 @@ const Information = () => {
   }, []);
 
   return (
-    <div className='container'>
+    <div className='container h-100'>
       {contextHolder}
       <div className='py-3'>
         <h2 className='text-center'>THÔNG TIN CÁ NHÂN</h2>
       </div>
       <hr />
-      <div className='row'>
-        <div className='col-md-4 col-xs-12'>
-          <div className='text-center'>
-            <Avatar />
-            <div className='pt-3'>
-              <Button size='large' icon={<UploadOutlined />}>
-                Tải ảnh lên
-              </Button>
-            </div>
-          </div>
-        </div>
-        <div className='col-md-8 col-xs-12 border-left'>
-          <Form layout='vertical'>
-            <LtFormInput label='Email' name='email' control={control} />
-            <LtFormInput label='Mật khẩu' name='password' control={control} />
-            <LtFormInput label='Xác nhận mật khẩu' name='passwordConfirm' control={control} />
-            <LtFormInput label='Họ và tên' name='name' control={control} />
-            <LtFormInput label='Số điện thoại' name='phone' control={control} />
-            <LtFormInput label='Địa chỉ' name='address' control={control} />
-          </Form>
+      <div className='text-center'>
+        <Avatar size={128}>A</Avatar>
+        <div className='pt-3'>
+          <Button size='large' icon={<UploadOutlined />}>
+            Tải ảnh lên
+          </Button>
         </div>
       </div>
+      <Form layout='vertical'>
+        <LtFormInput label='Email' name='email' control={control} />
+        <LtFormInput label='Mật khẩu' name='password' control={control} />
+        <LtFormInput label='Xác nhận mật khẩu' name='passwordConfirm' control={control} />
+        <LtFormInput label='Họ và tên' name='name' control={control} />
+        <LtFormInput label='Số điện thoại' name='phone' control={control} />
+        <LtFormInput label='Địa chỉ' name='address' control={control} />
+        <div className='form-group'>
+          <Button size='large'></Button>
+        </div>
+      </Form>
     </div>
   );
 };

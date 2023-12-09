@@ -7,7 +7,6 @@ import LoadingSpinner from './core/layouts/loading-spinner';
 import NonAuth from './core/layouts/non-auth';
 import Login from './pages/auth/login/Login';
 import Register from './pages/auth/register/Register';
-import ChangePassword from './pages/change-password/ChangePassword';
 import ForgotPassword from './pages/forgot-password/ForgotPassword';
 import Home from './pages/home';
 
@@ -16,6 +15,7 @@ import Carousels from './pages/admin/carousels';
 import Coupons from './pages/admin/coupons';
 import Dashboard from './pages/admin/dashboard';
 import Orders from './pages/admin/orders';
+import ProductTypes from './pages/admin/product-types';
 import Products from './pages/admin/products';
 import Users from './pages/admin/users';
 
@@ -81,24 +81,28 @@ const App = () => {
           element: <LazyComponent component={<Dashboard />} />,
         },
         {
-          path: 'users',
+          path: 'tai-khoan',
           element: <LazyComponent component={<Users />} />,
         },
         {
-          path: 'carousels',
+          path: 'banner',
           element: <LazyComponent component={<Carousels />} />,
         },
         {
-          path: 'coupons',
+          path: 'khuyen-mai',
           element: <LazyComponent component={<Coupons />} />,
         },
         {
-          path: 'orders',
+          path: 'don-hang',
           element: <LazyComponent component={<Orders />} />,
         },
         {
-          path: 'products',
+          path: 'san-pham',
           element: <LazyComponent component={<Products />} />,
+        },
+        {
+          path: 'loai-san-pham',
+          element: <LazyComponent component={<ProductTypes />} />,
         },
       ],
     },

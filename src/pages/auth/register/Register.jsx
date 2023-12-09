@@ -52,7 +52,7 @@ export default function Register() {
   };
 
   return (
-    <div className='register py-3'>
+    <div className='register py-3 layout-height'>
       {contextHolder}
       <div className='register-container'>
         <div className='register-title'>

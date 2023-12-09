@@ -1,4 +1,5 @@
 import {
+  AppstoreOutlined,
   BookOutlined,
   DiffOutlined,
   FileImageOutlined,
@@ -21,44 +22,51 @@ const menuItems = [
     icon: <HomeOutlined />,
   },
   {
-    path: 'users',
+    path: 'tai-khoan',
     label: 'Tài khoản',
-    activeKey: 'users',
+    activeKey: 'tai-khoan',
     icon: <UserOutlined />,
   },
   {
-    path: 'orders',
+    path: 'don-hang',
     label: 'Đơn hàng',
-    activeKey: 'orders',
+    activeKey: 'don-hang',
     icon: <DiffOutlined />,
   },
   {
-    path: 'products',
+    path: 'loai-san-pham',
+    label: 'Loại sản phẩm',
+    activeKey: 'loai-san-pham',
+    icon: <AppstoreOutlined />,
+  },
+  {
+    path: 'san-pham',
     label: 'Sản phẩm',
-    activeKey: 'products',
+    activeKey: 'san-pham',
     icon: <BookOutlined />,
   },
   {
-    path: 'carousels',
+    path: 'banner',
     label: 'Quảng cáo',
-    activeKey: 'carousels',
+    activeKey: 'banner',
     icon: <FileImageOutlined />,
   },
   {
-    path: 'coupons',
+    path: 'khuyen-mai',
     label: 'Khuyến mãi',
-    activeKey: 'coupons',
+    activeKey: 'khuyen-mai',
     icon: <GiftOutlined />,
   },
 ];
 
 const titleMap = {
   admin: 'admin dashboard',
-  orders: 'quản lý đơn hàng',
-  users: 'quản lý tài khoản',
-  products: 'quản lý sản phẩm',
-  carousels: 'quảng cáo',
-  coupons: 'khuyến mãi',
+  'don-hang': 'quản lý đơn hàng',
+  'tai-khoan': 'quản lý tài khoản',
+  'san-pham': 'quản lý sản phẩm',
+  banner: 'quản lý quảng cáo',
+  'khuyen-mai': 'quản lý khuyến mãi',
+  'loai-san-pham': 'quản lý loại sản phẩm',
 };
 
 const AdminLayout = () => {
@@ -95,9 +103,7 @@ const AdminLayout = () => {
                 {menuItems.map((item, idx) => (
                   <Menu.Item
                     key={`menu-item-${idx}`}
-                    className={
-                      currentPage.includes(item.activeKey) ? 'ant-menu-item-selected' : ''
-                    }>
+                    className={currentPage === item.activeKey ? 'ant-menu-item-selected' : ''}>
                     <NavLink to={item.path} className='flex ai-center'>
                       {item.icon}
                       <span>{item.label}</span>

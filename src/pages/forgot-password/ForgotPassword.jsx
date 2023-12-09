@@ -36,7 +36,7 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className='forgot-password'>
+    <div className='forgot-password layout-height'>
       {contextHolder}
       <div className='forgot-password-container'>
         <div className='forgot-password-title'>
