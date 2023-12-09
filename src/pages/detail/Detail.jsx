@@ -2,7 +2,7 @@ import { Button, message } from 'antd';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import ImageCard from '../../assets/img/cardlarge.png';
-import CardItem from '../../core/components/card-item/CardItem';
+import CardItem from '../../core/components/product-card/ProductCard';
 import { addProduct } from '../../stores/global/global.actions';
 import './style.scss';
 

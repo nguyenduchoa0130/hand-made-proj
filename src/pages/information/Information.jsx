@@ -64,8 +64,10 @@ const Information = () => {
         <LtFormInput label='Họ và tên' name='name' control={control} />
         <LtFormInput label='Số điện thoại' name='phone' control={control} />
         <LtFormInput label='Địa chỉ' name='address' control={control} />
-        <div className='form-group'>
-          <Button size='large'></Button>
+        <div className='form-group text-center'>
+          <Button size='large' type='primary'>
+            Cập Nhật Thông Tin{' '}
+          </Button>
         </div>
       </Form>
     </div>

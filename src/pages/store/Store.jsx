@@ -1,23 +1,22 @@
+import { SearchOutlined } from '@ant-design/icons';
+import { Button, Empty, Form, Space, message } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import LineFullIcon from '../../assets/icon/lineFullIcon.svg';
+import { useSearchParams } from 'react-router-dom';
 import LineIcon from '../../assets/icon/lineIcon.svg';
 import BannerImg from '../../assets/img/Banner-1.png';
-import CardStore from '../../core/components/card-store/CardStore';
+import LtFormDropdown from '../../core/components/lt-form-dropdown';
+import LtFormInput from '../../core/components/lt-form-input';
+import ProductCard from '../../core/components/product-card';
+import ProductTypesService from '../../shared/services/product-types.service';
 import { productService } from '../../shared/services/products.service';
 import { actions } from '../../stores';
 import './style.scss';
-import { Button, Empty, Form, Space, message } from 'antd';
-import LtFormInput from '../../core/components/lt-form-input';
-import { useForm } from 'react-hook-form';
-import ProductTypesService from '../../shared/services/product-types.service';
-import LtFormDropdown from '../../core/components/lt-form-dropdown';
-import { SearchOutlined } from '@ant-design/icons';
-import { useSearchParams } from 'react-router-dom';
 
 const Store = () => {
   const [products, setProducts] = useState([]);
-  const [productTypes, setProductTypes] = useState([]);
+  const [productTypesOptions, setProductTypesOptions] = useState([]);
   const dispatch = useDispatch();
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -66,7 +65,7 @@ const Store = () => {
       try {
         dispatch(actions.showLoading());
         const productTypes = await ProductTypesService.getAll();
-        setProductTypes(productTypes);
+        setProductTypesOptions(productTypes);
       } catch (error) {
         messageApi.error(error?.response?.data?.message || error.message);
       } finally {
@@ -78,8 +77,9 @@ const Store = () => {
   }, []);
 
   useEffect(() => {
+    console.log('run');
     const name = searchParams.get('name');
-    const productTypes = searchParams.get('productType');
+    const productTypes = searchParams.get('productTypes');
     reset({ name: name || '', productTypes: productTypes ? productTypes.split(',') : [] });
     getAllProducts({ name, productTypes });
   }, [searchParams]);
@@ -113,7 +113,7 @@ const Store = () => {
                 name='productTypes'
                 control={control}
                 placeholder='Loại sản phẩm'
-                dropdownOptions={productTypes.map((productType) => ({
+                dropdownOptions={productTypesOptions.map((productType) => ({
                   label: productType.name,
                   value: productType._id,
                 }))}
@@ -136,20 +136,7 @@ const Store = () => {
       <div className='store-body'>
         <div className='body'>
           {products && products.length ? (
-            products.map((item, index) => {
-              return (
-                <CardStore
-                  itemCard={{
-                    id: item._id,
-                    img: item.image[0],
-                    title: item.name,
-                    oldPrice: item.price * 2,
-                    newPrice: item.price,
-                  }}
-                  key={index}
-                />
-              );
-            })
+            products.map((item) => <ProductCard key={item._id} product={item} />)
           ) : (
             <div className='flex ai-center jc-center'>
               <Empty description='Không tìm thấy sản phẩm nào' />

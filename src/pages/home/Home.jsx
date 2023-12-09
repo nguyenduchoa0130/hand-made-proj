@@ -7,6 +7,7 @@ import { actions } from '../../stores';
 import { Button, Empty, message } from 'antd';
 import ProductTypesService from '../../shared/services/product-types.service';
 import { NavLink } from 'react-router-dom';
+import { ShopOutlined } from '@ant-design/icons';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -53,8 +54,11 @@ const Home = () => {
                   <div key={productType._id} className='product-type'>
                     <div className='product-type-overlap'>
                       <NavLink to={`/cua-hang?productType=${productType._id}`} className='w-100'>
-                        <Button size='large' className='product-type-overlap-button w-100'>
-                          Khám phá thêm
+                        <Button
+                          size='large'
+                          className='product-type-overlap-button w-100'
+                          icon={<ShopOutlined />}>
+                          Mua ngay
                         </Button>
                       </NavLink>
                     </div>
