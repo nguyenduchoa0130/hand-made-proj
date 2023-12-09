@@ -1,6 +1,8 @@
 import { Form, Modal, Upload } from 'antd';
 import React from 'react';
 import LtFormInput from '../../../core/components/lt-form-input';
+import LtFormDropdown from '../../../core/components/lt-form-dropdown';
+import LtFormTextArea from '../../../core/components/lt-form-textarea';
 
 const AddProduct = ({
   control,
@@ -12,43 +14,43 @@ const AddProduct = ({
   previewImage,
   previewTitle,
   handleCancel,
+  productTypes = [],
 }) => {
-  const uploadButton = (
-    <div>
-      <div
-        style={{
-          marginTop: 8,
-        }}>
-        Chọn ảnh
-      </div>
-    </div>
-  );
-
   return (
     <>
       <Form layout='vertical'>
         <LtFormInput
-          label='Tên sản phẩm'
-          control={control}
           name='name'
-          placeholder='Tên sản phẩm'
-          error={errors.ten_chi_nhanh}
-        />
-        <LtFormInput
-          label='Loại sản phẩm'
           control={control}
-          name='type'
-          placeholder='Loại sản phẩm'
-          error={errors.duong}
+          error={errors.name}
+          label='Tên sản phẩm'
+          placeholder='Tên sản phẩm'
+          rules={{
+            required: 'Vui lòng nhập thông tin',
+          }}
         />
-        <Upload
-          action='https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188'
-          listType='picture-card'
-          fileList={fileList}
-          onPreview={handlePreview}
-          onChange={handleChange}>
-          {fileList?.length >= 8 ? null : uploadButton}
-        </Upload>
+        <LtFormDropdown
+          name='type'
+          control={control}
+          error={errors.type}
+          label='Loại sản phẩm'
+          placeholder='Loại sản phẩm'
+          dropdownOptions={productTypes}
+          rules={{
+            required: 'Vui lòng chọn loại sản phẩmVui lòng chọn loại sản phẩm',
+          }}
+        />
+        <div>
+          <p className='m-0 mb-1'>Hình ảnh sản phẩm</p>
+          <Upload
+            listType='picture-card'
+            fileList={fileList}
+            onPreview={handlePreview}
+            onChange={handleChange}
+            beforeUpload={() => false}>
+            {fileList?.length >= 5 ? null : <span>Tải ảnh lên</span>}
+          </Upload>
+        </div>
         <Modal open={previewOpen} title={previewTitle} footer={null} onCancel={handleCancel}>
           <img
             alt='example'
@@ -63,14 +65,42 @@ const AddProduct = ({
           control={control}
           name='price'
           placeholder='Giá'
-          error={errors.thanh_pho}
+          error={errors.price}
+          rules={{
+            required: 'Vui lòng nhập thông tin',
+            validate: (value) => {
+              if (isNaN(+value) || +value < 0) {
+                return 'Giá tiền không hợp lệ';
+              }
+              return null;
+            },
+          }}
         />
         <LtFormInput
           label='Số lượng'
           control={control}
           name='countInStock'
           placeholder='Số lượng'
-          error={errors.khu_vuc}
+          error={errors.countInStock}
+          rules={{
+            required: 'Vui lòng nhập thông tin',
+            validate: (value) => {
+              if (isNaN(+value) || +value < 0) {
+                return 'Giá tiền không hợp lệ';
+              }
+              return null;
+            },
+          }}
+        />
+        <LtFormTextArea
+          label='Mô tả sản phẩm'
+          name='description'
+          control={control}
+          error={errors.description}
+          placeholder='Nhập mô tả sản phẩm'
+          rules={{
+            required: 'Vui lòng nhập thông tin',
+          }}
         />
       </Form>
     </>

@@ -1,8 +1,8 @@
 import { Form, Select } from 'antd';
-import React, { memo } from 'react';
+import React from 'react';
 import { Controller } from 'react-hook-form';
 
-const FormDropdown = ({
+const LtFormDropdown = ({
   label,
   error,
   name,
@@ -34,4 +34,4 @@ const FormDropdown = ({
   );
 };
 
-export default memo(FormDropdown);
+export default LtFormDropdown;

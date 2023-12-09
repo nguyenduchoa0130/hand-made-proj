@@ -1,5 +1,5 @@
-import { InfoCircleOutlined } from '@ant-design/icons';
-import { Button, Tag, message } from 'antd';
+import { InfoCircleOutlined, UserOutlined } from '@ant-design/icons';
+import { Avatar, Button, Tag, message } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import LtDynamicTable from '../../../core/components/lt-dynamic-table/';
 import UserService from '../../../shared/services/users.service';
@@ -15,6 +15,8 @@ const Users = () => {
       {
         title: 'ID',
         dataIndex: '_id',
+        render: (value) => value.slice(-7),
+        align: 'center',
       },
       {
         title: 'Email',
@@ -23,20 +25,18 @@ const Users = () => {
       {
         title: 'Họ và tên',
         dataIndex: 'name',
+        render: (value) => <span className='text-capitalize'>{value}</span>,
       },
       {
         title: 'Avatar',
         dataIndex: 'avatar',
         align: 'center',
+        render: (value) => <Avatar src={value} size={48} icon={<UserOutlined />} />,
       },
       {
         title: 'Điện thoại',
         dataIndex: 'phone',
         align: 'center',
-      },
-      {
-        title: 'Địa chỉ',
-        dataIndex: 'address',
       },
       {
         title: 'Loại tài khoản',
@@ -50,7 +50,7 @@ const Users = () => {
         title: '',
         dataIndex: null,
         render: () => (
-          <Button type='primary' icon={<InfoCircleOutlined />} size='large'>
+          <Button type='primary' icon={<InfoCircleOutlined />}>
             Chi tiết
           </Button>
         ),
@@ -77,13 +77,7 @@ const Users = () => {
   return (
     <>
       {contextHolder}
-      <LtDynamicTable
-        cols={tableColumns}
-        dataSrc={users}
-        hasFilters={true}
-        rowKey='_id'
-        searchByFields={['email', 'name', 'phone']}
-      />
+      <LtDynamicTable cols={tableColumns} dataSrc={users} rowKey='_id' />
     </>
   );
 };

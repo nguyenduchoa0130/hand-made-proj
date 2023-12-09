@@ -37,7 +37,7 @@ const LtDynamicTable = ({
     <>
       {hasFilters && (
         <Input
-          placeholder={`Search by ${searchByFields.join(', ')}`}
+          placeholder={`Tìm kiếm`}
           prefix={<AiOutlineSearch />}
           onChange={handleQueryChange}
           size='large'
