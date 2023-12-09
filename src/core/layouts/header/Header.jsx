@@ -74,7 +74,7 @@ const Header = () => {
             ) : (
               <>
                 <Tooltip title='Giỏ hàng'>
-                  <div className='icon-up' onClick={() => handleNavigate('/order')}>
+                  <div className='icon-up' onClick={() => handleNavigate('/don-hang')}>
                     <img src={BagIcon} alt='logo' />
                   </div>
                 </Tooltip>

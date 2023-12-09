@@ -8,18 +8,20 @@ import './styles.scss';
 const NonAuth = () => {
   return (
     <>
-      <ConfigProvider
-        theme={{
-          token: {
-            colorPrimary: '#74ABFA',
-          },
-        }}>
-        <Header />
-        <main id='non-auth-content'>
-          <Outlet />
-        </main>
-        <Footer />
-      </ConfigProvider>
+      <div id='client-layout'>
+        <ConfigProvider
+          theme={{
+            token: {
+              colorPrimary: '#74ABFA',
+            },
+          }}>
+          <Header />
+          <main id='non-auth-content'>
+            <Outlet />
+          </main>
+          <Footer />
+        </ConfigProvider>
+      </div>
     </>
   );
 };

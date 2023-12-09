@@ -1,3 +1,8 @@
-#non-auth-content {
-  min-height: calc(100vh - 160px);
+#client-layout {
+  * {
+    font-family: 'Source Code Pro', monospace !important;
+  }
+  #non-auth-content {
+    min-height: calc(100vh - 160px);
+  }
 }

@@ -1,33 +1,78 @@
-import React from 'react';
-import banner1 from '../../assets/img/Banner-1.png'
-import banner2 from '../../assets/img/Banner-2.png'
-import './style.scss'
-import TemplateList from './components/template-list/TemplateList';
-import Image1 from '../../assets/img/img-1.png'
-import Image2 from '../../assets/img/img-2.png'
+import React, { useEffect, useState } from 'react';
+import banner1 from '../../assets/img/Banner-1.png';
+import banner2 from '../../assets/img/Banner-2.png';
+import './style.scss';
+import { useDispatch } from 'react-redux';
+import { actions } from '../../stores';
+import { Button, Empty, message } from 'antd';
+import ProductTypesService from '../../shared/services/product-types.service';
+import { NavLink } from 'react-router-dom';
 
 const Home = () => {
-  return <div className='home'>
-    <div className='banner'>
-      <div>
-        <img src={banner1} alt='banner' />
+  const dispatch = useDispatch();
+  const [productTypes, setProductTypes] = useState([]);
+  const [messageApi, contextHolder] = message.useMessage();
+
+  useEffect(() => {
+    const getProductTypes = async () => {
+      try {
+        dispatch(actions.showLoading());
+        const productTypes = await ProductTypesService.getAll();
+        setProductTypes(productTypes);
+      } catch (error) {
+        messageApi(error?.response?.data?.message || error.message);
+      } finally {
+        dispatch(actions.hideLoading());
+      }
+    };
+
+    getProductTypes();
+  }, []);
+  return (
+    <div className='home'>
+      {contextHolder}
+      <div className='banner'>
+        <div>
+          <img src={banner1} alt='banner' />
+        </div>
+        <div>
+          <img src={banner2} alt='banner' />
+          <img src={banner2} alt='banner' />
+        </div>
       </div>
-      <div>
-        <img src={banner2} alt='banner' />
-        <img src={banner2} alt='banner' />
+      <div className='container-fluid py-3'>
+        <h1 className='text-center text-uppercase'>danh mục sản phẩm</h1>
+        <div className='flex ai-center jc-center'>
+          <img src='/images/divider.png' alt='Divider' />
+        </div>
+        <div className='py-2'>
+          {productTypes.length ? (
+            <>
+              <div className='list-product-types'>
+                {productTypes.map((productType) => (
+                  <div key={productType._id} className='product-type'>
+                    <div className='product-type-overlap'>
+                      <NavLink to={`/cua-hang?productType=${productType._id}`} className='w-100'>
+                        <Button size='large' className='product-type-overlap-button w-100'>
+                          Khám phá thêm
+                        </Button>
+                      </NavLink>
+                    </div>
+                    <img src={productType.imageUrl} alt={productType.name} />
+                    <h5>{productType.name}</h5>
+                  </div>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className='flex ai-center jc-center'>
+              <Empty description='Danh sách loại sản phẩm trống' />
+            </div>
+          )}
+        </div>
       </div>
     </div>
-    <div className='category'>
-      <div>Nguyên liệu thêu</div>
-      <div>Nguyên liệu đan móc</div>
-      <div>Nguyên liệu thêu nối</div>
-      <div>Nguyên liệu len chọc</div>
-      <div>Nguyên liệu khác</div>
-    </div>
-    <TemplateList item={{title:'Thêu',image:Image1, bgColor:'#ED969A'}} />
-    <TemplateList item={{title:'Đan móc',image:Image2, bgColor:'#D2AA06'}}/>
-    
-  </div>;
+  );
 };
 
 export default Home;
