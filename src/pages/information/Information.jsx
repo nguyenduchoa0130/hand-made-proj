@@ -43,7 +43,7 @@ const Information = () => {
   }, []);
 
   return (
-    <div className='container h-100'>
+    <div className='container h-100 pb-5'>
       {contextHolder}
       <div className='py-3'>
         <h2 className='text-center'>THÔNG TIN CÁ NHÂN</h2>
@@ -66,7 +66,7 @@ const Information = () => {
         <LtFormInput label='Địa chỉ' name='address' control={control} />
         <div className='form-group text-center'>
           <Button size='large' type='primary'>
-            Cập Nhật Thông Tin{' '}
+            Cập Nhật Thông Tin
           </Button>
         </div>
       </Form>

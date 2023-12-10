@@ -8,10 +8,10 @@ const LtFormInput = ({
   name,
   rules,
   control,
-  children,
   placeholder,
   isPassword,
-  ...others
+  isReadOnly,
+  isDisabled,
 }) => {
   return (
     <>
@@ -22,9 +22,21 @@ const LtFormInput = ({
           control={control}
           render={({ field }) =>
             isPassword ? (
-              <Input.Password placeholder={placeholder} {...field} size='large' {...others} />
+              <Input.Password
+                size='large'
+                readOnly={isReadOnly}
+                disabled={isDisabled}
+                placeholder={placeholder}
+                {...field}
+              />
             ) : (
-              <Input placeholder={placeholder} {...field} size='large' {...others} />
+              <Input
+                size='large'
+                readOnly={isReadOnly}
+                disabled={isDisabled}
+                placeholder={placeholder}
+                {...field}
+              />
             )
           }
         />

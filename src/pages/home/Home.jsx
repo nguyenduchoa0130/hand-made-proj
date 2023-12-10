@@ -46,6 +46,7 @@ const Home = () => {
         <div className='flex ai-center jc-center'>
           <img src='/images/divider.png' alt='Divider' />
         </div>
+
         <div className='py-2'>
           {productTypes.length ? (
             <>
