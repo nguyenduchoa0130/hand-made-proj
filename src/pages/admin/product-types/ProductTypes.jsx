@@ -1,8 +1,9 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined, UploadOutlined } from '@ant-design/icons';
-import { Button, Form, Image, Space, Upload, message } from 'antd';
+import { Button, Form, Image, Space, Tooltip, Upload, message } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
 import LtDynamicTable from '../../../core/components/lt-dynamic-table';
 import LtFormInput from '../../../core/components/lt-form-input';
 import LtFormModal from '../../../core/components/lt-form-modal';
@@ -14,6 +15,8 @@ const ProductTypes = () => {
   const [productTypes, setProductTypes] = useState([]);
   const [imageFile, setImageFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [productTypeId, setProductTypeId] = useState(null);
 
   const dispatch = useDispatch();
   const [messageApi, contextHolder] = message.useMessage();
@@ -25,18 +28,24 @@ const ProductTypes = () => {
     formState: { errors },
   } = useForm({ defaultValues: { name: '' } });
 
+  const getProductTypes = async () => {
+    try {
+      dispatch(actions.showLoading());
+      const productTypes = await ProductTypesService.getAll();
+      setProductTypes(productTypes);
+    } catch (error) {
+      messageApi.error(error?.response?.data?.message || error.message);
+    } finally {
+      dispatch(actions.hideLoading());
+    }
+  };
+
   const handleCloseModal = () => {
     revokeImageUrl();
     reset({ name: '' });
     setIsOpen(false);
-  };
-
-  const beforeUploadImage = (file) => {
-    const isImage = file.type.startsWith('image/');
-    if (!isImage) {
-      messageApi.error.warn('Chi cho phép upload hình ảnh');
-    }
-    return false;
+    setIsUpdating(false);
+    setImageFile(null);
   };
 
   const revokeImageUrl = () => {
@@ -48,10 +57,29 @@ const ProductTypes = () => {
   };
 
   const handleUploadImageFile = ({ file }) => {
+    const isImage = file.type.startsWith('image/');
+    const isSizeValid = file.size / 1024 / 1024 < 10;
+    if (!isImage) {
+      return messageApi.warning('Chi cho phép upload hình ảnh');
+    }
+    if (!isSizeValid) {
+      return messageApi.warning('Kích thước file quá lớn. Vui lòng chọn file nhỏ hơn 10MB.');
+    }
+
     revokeImageUrl();
     const imageUrl = URL.createObjectURL(file);
     setImageFile(file);
     setImageUrl(imageUrl);
+  };
+
+  const openUpdateProductTypeDialog = async (productType) => {
+    reset({
+      name: productType.name,
+    });
+    setImageUrl(productType.imageUrl);
+    setProductTypeId(productType._id);
+    setIsUpdating(true);
+    setIsOpen(true);
   };
 
   const createProductType = async (formValue) => {
@@ -68,11 +96,62 @@ const ProductTypes = () => {
       setProductTypes([newProductType, ...productTypes]);
       handleCloseModal();
     } catch (error) {
-      console.log(error);
       messageApi.error(error?.response?.data?.message || error.message);
     } finally {
       dispatch(actions.hideLoading());
     }
+  };
+
+  const updateProductType = async (formValue) => {
+    try {
+      dispatch(actions.showLoading());
+      const formData = new FormData();
+      formData.append('name', formValue.name);
+      if (imageFile) {
+        formData.append('image', imageFile);
+        formData.append('imageUrl', imageUrl);
+      }
+      await ProductTypesService.update(productTypeId, formData);
+      handleCloseModal();
+      getProductTypes();
+    } catch (error) {
+      messageApi.error(error?.response?.data?.message || error.message);
+    } finally {
+      dispatch(actions.hideLoading());
+    }
+  };
+
+  const handleSubmitProductTypeForm = (formValue) => {
+    if (isUpdating) {
+      updateProductType(formValue);
+    } else {
+      createProductType(formValue);
+    }
+  };
+
+  const handleDeleteProductType = async (productTypeId) => {
+    Swal.fire({
+      icon: 'question',
+      title: 'Xoá Loại Sản Phẩm',
+      text: 'Bạn có chắc là muốn xoá loại sản phẩm này không?',
+      showCancelButton: true,
+      cancelButtonText: 'Huỷ',
+      confirmButtonText: 'Xác nhận',
+      confirmButtonColor: 'red',
+    }).then(async ({ isConfirmed }) => {
+      if (isConfirmed) {
+        try {
+          dispatch(actions.showLoading());
+          messageApi.success('Xoá loại sản phẩm thành công');
+          await ProductTypesService.delete(productTypeId);
+          getProductTypes();
+        } catch (error) {
+          messageApi.error(error?.response?.data?.message || error.message);
+        } finally {
+          dispatch(actions.hideLoading());
+        }
+      }
+    });
   };
 
   const columns = useMemo(() => {
@@ -105,12 +184,25 @@ const ProductTypes = () => {
         dataIndex: null,
         render: (_, productType) => (
           <Space>
-            <Button size='large' type='primary' icon={<EditOutlined />}>
-              Cập nhật
-            </Button>
-            <Button size='large' type='primary' icon={<DeleteOutlined />} danger>
-              Xoá
-            </Button>
+            <Tooltip title='Cập nhật'>
+              <Button
+                size='large'
+                type='primary'
+                shape='circle'
+                icon={<EditOutlined />}
+                onClick={() => openUpdateProductTypeDialog(productType)}
+              />
+            </Tooltip>
+            <Tooltip title='Xoá'>
+              <Button
+                danger
+                size='large'
+                type='primary'
+                shape='circle'
+                icon={<DeleteOutlined />}
+                onClick={() => handleDeleteProductType(productType._id)}
+              />
+            </Tooltip>
           </Space>
         ),
         align: 'center',
@@ -119,18 +211,6 @@ const ProductTypes = () => {
   }, []);
 
   useEffect(() => {
-    const getProductTypes = async () => {
-      try {
-        dispatch(actions.showLoading());
-        const productTypes = await ProductTypesService.getAll();
-        setProductTypes(productTypes);
-      } catch (error) {
-        messageApi.error(error?.response?.data?.message || error.message);
-      } finally {
-        dispatch(actions.hideLoading());
-      }
-    };
-
     getProductTypes();
   }, []);
 
@@ -142,14 +222,14 @@ const ProductTypes = () => {
           Thêm mới
         </Button>
       </div>
-      <LtDynamicTable cols={columns} dataSrc={productTypes} />
+      <LtDynamicTable cols={columns} dataSrc={productTypes} rowKey='_id' />
       <LtFormModal
         isOpen={isOpen}
-        title='Thêm loại sản phẩm'
+        title={isUpdating ? 'CẬP NHẬT LOẠI SẢN PHẨM' : 'THÊM LOẠI SẢN PHẨM'}
         onCancel={handleCloseModal}
-        okBtnText='Thêm'
+        okBtnText={isUpdating ? 'Cập nhật' : 'Thêm'}
         cancelBtnText='Huỷ'
-        onSubmit={handleSubmit(createProductType)}>
+        onSubmit={handleSubmit(handleSubmitProductTypeForm)}>
         <Form name='my-add-product-type-form' layout='vertical'>
           <LtFormInput
             label='Tên sản phẩm'
@@ -168,7 +248,7 @@ const ProductTypes = () => {
             <Upload
               name='avatar'
               onRemove={revokeImageUrl}
-              beforeUpload={beforeUploadImage}
+              beforeUpload={() => false}
               onChange={handleUploadImageFile}
               showUploadList={false}>
               <Button size='large' icon={<UploadOutlined />}>
