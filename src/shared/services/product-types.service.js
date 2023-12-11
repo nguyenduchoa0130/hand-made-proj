@@ -1,8 +1,14 @@
 import axiosClient from '../interceptors';
 
 const ProductTypesService = {
+  getAll: async () => {
+    const { data: responseResults } = await axiosClient.get('/api/product-types');
+    return responseResults.data;
+  },
+
   create: async (formData) => {
-    const { data: responseResults } = await axiosClient.post('/api/product-types', formData, {
+    const path = '/api/product-types/create';
+    const { data: responseResults } = await axiosClient.post(path, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -10,21 +16,13 @@ const ProductTypesService = {
     return responseResults.data;
   },
 
-  getAll: async () => {
-    const { data: responseResults } = await axiosClient.get('/api/product-types');
-    return responseResults.data;
-  },
-
   update: async (productTypeId, formData) => {
-    const { data: responseResults } = await axiosClient.patch(
-      `/api/product-types/update/${productTypeId}`,
-      formData,
-      {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+    const path = `/api/product-types/update/${productTypeId}`;
+    const { data: responseResults } = await axiosClient.patch(path, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
       },
-    );
+    });
     return responseResults.data;
   },
 

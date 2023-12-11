@@ -14,7 +14,7 @@ const LtFormDatePicker = ({ label, error, name, control, rules, placeholder }) =
             <DatePicker
               {...field}
               placeholder={placeholder}
-              format='DD//MM/YYYY'
+              format='DD/MM/YYYY'
               className='w-100'
               size='large'
             />
