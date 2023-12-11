@@ -1,8 +1,8 @@
 import { DatePicker, Form } from 'antd';
-import React, { memo } from 'react';
+import React from 'react';
 import { Controller } from 'react-hook-form';
 
-const FormDatePicker = ({ label, error, name, control, rules, placeholder }) => {
+const LtFormDatePicker = ({ label, error, name, control, rules, placeholder }) => {
   return (
     <>
       <Form.Item label={label} validateStatus={error ? 'error' : ''} help={error && error.message}>
@@ -14,7 +14,7 @@ const FormDatePicker = ({ label, error, name, control, rules, placeholder }) => 
             <DatePicker
               {...field}
               placeholder={placeholder}
-              format='MM/DD/YYYY'
+              format='DD//MM/YYYY'
               className='w-100'
               size='large'
             />
@@ -25,4 +25,4 @@ const FormDatePicker = ({ label, error, name, control, rules, placeholder }) => 
   );
 };
 
-export default memo(FormDatePicker);
+export default LtFormDatePicker;

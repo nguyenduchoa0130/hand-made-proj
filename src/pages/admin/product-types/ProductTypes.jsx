@@ -46,6 +46,7 @@ const ProductTypes = () => {
     setIsOpen(false);
     setIsUpdating(false);
     setImageFile(null);
+    setProductTypeId(null);
   };
 
   const revokeImageUrl = () => {
@@ -142,8 +143,8 @@ const ProductTypes = () => {
       if (isConfirmed) {
         try {
           dispatch(actions.showLoading());
-          messageApi.success('Xoá loại sản phẩm thành công');
           await ProductTypesService.delete(productTypeId);
+          messageApi.success('Xoá loại sản phẩm thành công');
           getProductTypes();
         } catch (error) {
           messageApi.error(error?.response?.data?.message || error.message);
