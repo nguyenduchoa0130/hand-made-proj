@@ -1,22 +1,29 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Empty, Form, Space, message } from 'antd';
+import { Button, Carousel, Empty, Form, Space, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import LineIcon from '../../assets/icon/lineIcon.svg';
-import BannerImg from '../../assets/img/Banner-1.png';
 import LtFormDropdown from '../../core/components/lt-form-dropdown';
 import LtFormInput from '../../core/components/lt-form-input';
 import ProductCard from '../../core/components/product-card';
+import CarouselsService from '../../shared/services/carousels.service';
 import ProductTypesService from '../../shared/services/product-types.service';
 import { productService } from '../../shared/services/products.service';
 import { actions } from '../../stores';
 import './style.scss';
 
+const contentStyle = {
+  display: 'block',
+  height: '600px',
+  width: '100%',
+  objectFit: 'contain',
+};
+
 const Store = () => {
   const [products, setProducts] = useState([]);
   const [productTypesOptions, setProductTypesOptions] = useState([]);
+  const [carousels, setCarousels] = useState([]);
   const dispatch = useDispatch();
 
   const [messageApi, contextHolder] = message.useMessage();
@@ -61,11 +68,15 @@ const Store = () => {
   };
 
   useEffect(() => {
-    const getProductTypes = async () => {
+    const initHomePage = async () => {
       try {
         dispatch(actions.showLoading());
-        const productTypes = await ProductTypesService.getAll();
+        const [productTypes, carousels] = await Promise.all([
+          ProductTypesService.getAll(),
+          CarouselsService.getAll(),
+        ]);
         setProductTypesOptions(productTypes);
+        setCarousels(carousels);
       } catch (error) {
         messageApi.error(error?.response?.data?.message || error.message);
       } finally {
@@ -73,11 +84,10 @@ const Store = () => {
       }
     };
 
-    getProductTypes();
+    initHomePage();
   }, []);
 
   useEffect(() => {
-    console.log('run');
     const name = searchParams.get('name');
     const productTypes = searchParams.get('productTypes');
     reset({ name: name || '', productTypes: productTypes ? productTypes.split(',') : [] });
@@ -87,13 +97,18 @@ const Store = () => {
   return (
     <div className='store'>
       {contextHolder}
-      <div className='banner'>
-        <img src={BannerImg} alt='' />
+      <div className='py-3'>
+        <Carousel autoplay className='bg-light'>
+          {carousels.map((item) => (
+            <div key={item._id}>
+              <img style={contentStyle} src={item.imageUrl} alt='Carousel' />
+            </div>
+          ))}
+        </Carousel>
       </div>
-      <div className='line-category'>
-        <img src={LineIcon} alt='line' />
-        <div>Danh Sách Sản Phẩm</div>
-        <img src={LineIcon} alt='line' />
+      <h1 className='text-center text-uppercase'>tìm kiếm sản phẩm</h1>
+      <div className='flex ai-center jc-center py-3'>
+        <img src='/images/divider.png' alt='Divider' />
       </div>
       <div className='container'>
         <Form layout='vertical' onFinish={handleSubmit(handleSearchProduct)}>
@@ -133,17 +148,17 @@ const Store = () => {
         </Form>
       </div>
       <hr />
-      <div className='store-body'>
-        <div className='body'>
-          {products && products.length ? (
-            products.map((item) => <ProductCard key={item._id} product={item} />)
-          ) : (
-            <div className='flex ai-center jc-center'>
-              <Empty description='Không tìm thấy sản phẩm nào' />
-            </div>
-          )}
+      {products && products.length ? (
+        <div className='store-body'>
+          {products.map((item) => (
+            <ProductCard key={item._id} product={item} />
+          ))}
         </div>
-      </div>
+      ) : (
+        <div className='text-center'>
+          <Empty description='Không tìm thấy sản phẩm nào' />
+        </div>
+      )}
     </div>
   );
 };

@@ -1,126 +1,276 @@
-import { Button, message } from 'antd';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import ImageCard from '../../assets/img/cardlarge.png';
-import CardItem from '../../core/components/product-card/ProductCard';
-import { addProduct } from '../../stores/global/global.actions';
+import { ShoppingCartOutlined } from '@ant-design/icons';
+import { Button, Carousel, Empty, Form, InputNumber, message } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { NumericFormat } from 'react-number-format';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import ProductCard from '../../core/components/product-card';
+import CommentsService from '../../shared/services/comments.service';
+import { productService } from '../../shared/services/products.service';
+import { actions, selectors } from '../../stores';
+import CommentItem from './comment-item/CommentItem';
+import Comment from './comments/Comments';
 import './style.scss';
 
-function Detail() {
-  const [count, setCount] = useState(1);
+const contentStyle = {
+  display: 'block',
+  height: '600px',
+  width: '100%',
+  objectFit: 'contain',
+};
+
+const chunkArray = (array, size) => {
+  return Array.from({ length: Math.ceil(array.length / size) }, (_, index) =>
+    array.slice(index * size, (index + 1) * size),
+  );
+};
+
+const Detail = () => {
+  const { id } = useParams();
+  const [product, setProduct] = useState(null);
+  const [comments, setComments] = useState([]);
+  const [relevantProducts, setRelevantProducts] = useState([]);
+  const userInfo = useSelector(selectors.selectUserInfo);
+
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
-  const itemMock = {
-    id: '2',
-    img: ImageCard,
-    title: 'Bộ nguyên liệu làm thỏ bông (bao gồm kim, khung)',
-    oldPrice: 6000000,
-    newPrice: 50000,
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      amount: 1,
+    },
+  });
+
+  const getProductDetail = async () => {
+    try {
+      dispatch(actions.showLoading());
+      const product = await productService.getProductById(id);
+      setProduct(product);
+    } catch (error) {
+      messageApi.error(error?.response?.data?.message || error.message);
+    } finally {
+      dispatch(actions.hideLoading());
+    }
   };
-  const add = () => {
-    dispatch(addProduct({ ...itemMock, number: count }));
-    messageApi.open({
-      type: 'success',
-      content: 'Thêm thành công',
+
+  const getRelevantProducts = async () => {
+    try {
+      dispatch(actions.showLoading());
+      const relevantProducts = await productService.getRelevantProducts(id);
+      setRelevantProducts(relevantProducts);
+    } catch (error) {
+      messageApi.error(error?.response?.data?.message || error.message);
+    } finally {
+      dispatch(actions.hideLoading());
+    }
+  };
+
+  const getCommentsOfProduct = async () => {
+    try {
+      dispatch(actions.showLoading());
+      const comments = await CommentsService.getCommentsByProductId(id);
+      setComments(comments);
+    } catch (error) {
+      messageApi.error(error?.response?.data?.message || error.message);
+    } finally {
+      dispatch(actions.hideLoading());
+    }
+  };
+
+  const handleAddToCart = (formValue) => {};
+
+  const handleAddComment = async (formValue) => {
+    try {
+      dispatch(actions.showLoading());
+      await CommentsService.create({
+        productId: product._id,
+        userId: userInfo.id,
+        content: formValue.content,
+      });
+      getCommentsOfProduct();
+    } catch (error) {
+      messageApi.error(error?.response?.data?.message || error.message);
+    } finally {
+      dispatch(actions.hideLoading());
+    }
+  };
+
+  const handleUpdateComment = async (comment) => {
+    const { value: text, isConfirmed } = await Swal.fire({
+      input: 'textarea',
+      inputValue: comment.content,
+      inputLabel: 'Nhận xét',
+      inputPlaceholder: 'Nhận xét sản phẩm',
+      showCancelButton: true,
+      cancelButtonText: 'Đóng',
+      confirmButtonText: 'Cập nhật',
+      inputValidator: (value) => {
+        if (!value.trim()) {
+          return 'Không được để trống';
+        }
+      },
     });
+    if (isConfirmed) {
+      try {
+        dispatch(actions.showLoading());
+        await CommentsService.update(comment._id, { content: text });
+        getCommentsOfProduct();
+      } catch (error) {
+        messageApi.error(error?.response?.data?.message || error.message);
+      } finally {
+        dispatch(actions.hideLoading());
+      }
+    }
   };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      dispatch(actions.showLoading());
+      await CommentsService.remove(commentId);
+      getCommentsOfProduct();
+    } catch (error) {
+      messageApi.error(error?.response?.data?.message || error.message);
+    } finally {
+      dispatch(actions.hideLoading());
+    }
+  };
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    getProductDetail();
+    getRelevantProducts();
+    getCommentsOfProduct();
+  }, [id]);
 
   return (
-    <div className='detail'>
+    <>
       {contextHolder}
-      <div className='detail-content'>
-        <div className='left'>
-          <div className='thumbnail'>
-            <img src={ImageCard} alt='card' />
-          </div>
-          <div className='item'>
-            <img src={ImageCard} alt='card' />
-            <img src={ImageCard} alt='card' className='active' />
-            <img src={ImageCard} alt='card' />
-            <img src={ImageCard} alt='card' />
-            <img src={ImageCard} alt='card' />
-          </div>
-        </div>
-        <div className='right'>
-          <div className='info'>
-            <div className='title'>[Set thêu tiết kiệm] Dụng cụ cơ bản chỉ Airo + phụ kiện</div>
-            <div className='price'>111.000đ</div>
-            <div className='number'>
-              <div className='text-number'>Số lượng:</div>
-              <div className='count'>
-                <div
-                  onClick={() => {
-                    if (count !== 1) {
-                      setCount(count - 1);
-                    }
-                  }}>
-                  -
+      <div className='container-fluid p-5'>
+        {product ? (
+          <>
+            <div className='row'>
+              <div className='col-md-6 col-xs-12'>
+                <Carousel autoplay className='bg-light'>
+                  {product.image.map((imageUrl) => (
+                    <div key={imageUrl}>
+                      <img style={contentStyle} src={imageUrl} alt='Carousel' />
+                    </div>
+                  ))}
+                </Carousel>
+              </div>
+              <div className='col-md-6 col-xs-12'>
+                <h1>{product.name}</h1>
+                <hr />
+                <div className='detail-item'>
+                  <span className='detail-item-title'>Loại sản phẩm: </span>
+                  <span>{product.type.name}</span>
                 </div>
-                <div>{count}</div>
-                <div onClick={() => setCount(count + 1)}>+</div>
+                <div className='detail-item'>
+                  <span className='detail-item-title'>Số lượng còn lại: </span>
+                  <span>{product.countInStock}</span>
+                </div>
+                <div className='detail-item'>
+                  <span className='detail-item-title'>Giá: </span>
+                  <NumericFormat value={product.price} displayType='text' thousandSeparator=',' />
+                </div>
+                <Form layout='vertical' onFinish={handleSubmit(handleAddToCart)}>
+                  <div className='d-flex'>
+                    <Form.Item
+                      label='Số lượng'
+                      validateStatus={errors && errors.amount ? 'error' : ''}
+                      help={errors && errors.amount && errors.amount.message}
+                      className='my-3'>
+                      <Controller
+                        name='amount'
+                        control={control}
+                        rules={{
+                          required: 'Vui lòng nhập số lượng',
+                          validate: (value) => {
+                            if (!value || +value < 1) {
+                              return 'Số lượng phải lớn hơn 0';
+                            }
+                          },
+                        }}
+                        render={({ field }) => (
+                          <InputNumber {...field} size='large' min={1} max={product.countInStock} />
+                        )}
+                      />
+                    </Form.Item>
+                    <Button
+                      size='large'
+                      icon={<ShoppingCartOutlined />}
+                      type='primary'
+                      className='ml-3'
+                      style={{ alignSelf: 'center', marginTop: 28 }}>
+                      Thêm vào giỏ hàng
+                    </Button>
+                  </div>
+                </Form>
               </div>
             </div>
-            <div className='add'>
-              <Button onClick={add}>Thêm vào giỏ hàng</Button>
+            <div className='py-4'>
+              <h3 className='text-uppercase'>mô tả sản phẩm</h3>
+              <hr />
+              <p>{product.description}</p>
             </div>
-          </div>
-
-          <div className='description'>
-            <div className='title'>Mô tả</div>
-            <div>
-              Set 50 màu chỉ bao gồm:
-              <br />
-              1. Set chỉ thêu hãng Airo ngẫu nhiên, gồm 50 màu chỉ cơ bản. Sợi chỉ mềm, trơn, dai và
-              bền chắc, không phai màu. Mỗi sợi chỉ dài 8m gồm 6 sợi chỉ nhỏ, có thể tách sợi để
-              thêu.
-              <br />
-              Gọn gàng và bảo quản chỉ lâu hơn khi cất trong hộp nhựa. Ngoài ra các bạn có thể mua
-              miếng cuốn rời tại đây.
-              <br />
-              2. Kéo bấm cắt chỉ nhỏ gọn, lưỡi kéo sắc bén, ứng dụng trong cắt chỉ khi may vá, thêu
-              thùa
-              <br />
-              3. Bộ kim 26 chiếc hoặc hộp kim 30 chiếc đủ các cỡ kim phục vụ nhu cầu may vá thêu
-              thùa cơ bản trong gia đình. Chất liệu thép không gỉ giúp thêu trơn tru và bền đẹp. Phù
-              hợp để dùng với chỉ thêu, chỉ may, len ruybang...
-              <br />
-              4. Giấy can lụa dùng để can lại hình thêu cho người không biết vẽ
-              <br />
-              5. Vải thô mộc tập thêu khổ 100x40cm, vải chưa qua nhuộm, giữ nguyên màu thuần của sợi
-              dệt tạo nên sự mộc mạc độc đáo. Vải có màu kem tự nhiên và độ dày vừa phải, phù hợp
-              làm túi, ví nhỏ, tranh... Tham khảo các loại vải tập thêu khác.
-              <br />
-              Lưu ý: Vải thô mộc dễ nhăn, khó ủi và có thể bị mốc nếu để ẩm quá lâu, vì vậy khi giặt
-              bạn nên giũ nước (KHÔNG VẮT), phơi trực tiếp dưới nắng cho khô hoặc sấy thật khô để
-              tránh mốc. Không nên vắt để tránh vải bị nhăn.
-              <br />
-              Nếu vải bị nhăn, nên ủi với nhiệt độ cao và ủi lâu hơn các loại vải khác. Tốt nhất nên
-              dùng vải may những vật dụng không cần giặt quá nhiều lần để tránh giảm chất lượng vải.
-              <br />
-              6. Bút vẽ vải bay màu bằng nhiệt độ, sau khi thêu xong chỉ cần dùng bàn là hoặc máy
-              sấy để làm bay màu mực
-              <br />
-              7. Khung thêu bằng nhựa cỡ 20cm, màu be, khung cứng cáp, có chốt mạ bạc chắc chắn. 2
-              khung trong và ngoài có rãnh khớp với nhau giúp căng vải chắc chắn, không bị trơn.
-              <br />
-              8. Set 50 màu chỉ đi kèm hộp kim ghim vải 100 chiếc ghim vải màu trắng dùng để ghim
-              vải hoặc phục vụ 1 số mũi thêu cần thiết
+            <div className='py-4'>
+              <h3 className='text-uppercase'>các sản phẩm liên quan</h3>
+              <hr />
+              <div className='py-2'>
+                <Carousel autoplay autoplaySpeed={10000}>
+                  {chunkArray(relevantProducts, 4).map((productSet, index) => (
+                    <div className='list-relevant-products' key={index}>
+                      {productSet.map((product) => (
+                        <div className='list-relevant-item'>
+                          <ProductCard key={product._id} product={product} />
+                        </div>
+                      ))}
+                    </div>
+                  ))}
+                </Carousel>
+              </div>
             </div>
+            <div className='py-4'>
+              <h3 className='text-uppercase'>bình luận</h3>
+              <hr />
+              {userInfo && (
+                <>
+                  <Comment onAddComment={handleAddComment} />
+                </>
+              )}
+              {comments && comments.length ? (
+                <div className='pt-4'>
+                  {comments.map((comment) => (
+                    <CommentItem
+                      key={comment._id}
+                      comment={comment}
+                      currentUser={userInfo}
+                      onDelete={handleDeleteComment}
+                      onUpdate={handleUpdateComment}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className='text-center'>
+                  <Empty description='Chưa có bình luận' />
+                </div>
+              )}
+            </div>
+          </>
+        ) : (
+          <div>
+            <Empty description='Không tìm thấy sản phẩm này' />
           </div>
-        </div>
+        )}
       </div>
-      <div className='reference'>
-        <div className='title-refer'>Sản phẩm cùng loại</div>
-        <div className='content-refer'>
-          <CardItem />
-          <CardItem />
-          <CardItem />
-          <CardItem />
-          <CardItem />
-        </div>
-      </div>
-    </div>
+    </>
   );
-}
+};
 
 export default Detail;

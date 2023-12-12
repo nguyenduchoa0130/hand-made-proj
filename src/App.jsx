@@ -66,7 +66,7 @@ const App = () => {
           element: <LazyComponent component={<Order />} />,
         },
         {
-          path: 'san-pham/:id',
+          path: 'chi-tiet-san-pham/:id',
           element: <LazyComponent component={<Detail />} />,
         },
       ],

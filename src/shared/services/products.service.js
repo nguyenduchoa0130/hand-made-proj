@@ -39,6 +39,7 @@ class ProductService extends BaseService {
       throw error;
     }
   }
+
   async deleteProducts(id) {
     try {
       const { data } = await this.axiosClient.delete(`${this.path}/delete/${id}`);
@@ -46,6 +47,17 @@ class ProductService extends BaseService {
     } catch (error) {
       throw error;
     }
+  }
+
+  async getProductById(id) {
+    const { data: responseResults } = await this.axiosClient.get(`/api/product/get-details/${id}`);
+    return responseResults.data;
+  }
+
+  async getRelevantProducts(id) {
+    const path = `/api/product/get-relevant-products/${id}`;
+    const { data: responseResults } = await this.axiosClient.get(path);
+    return responseResults.data;
   }
 }
 

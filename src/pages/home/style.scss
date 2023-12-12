@@ -1,24 +1,6 @@
 .home {
   padding: 20px 3%;
 
-  .banner {
-    display: flex;
-    column-gap: 20px;
-    background: linear-gradient(180deg, #ffeded 0%, #fff 100%);
-
-    img {
-      width: 100%;
-      border-radius: 10px;
-    }
-
-    div:first-child {
-      width: 70%;
-    }
-    div:last-child {
-      width: 30%;
-    }
-  }
-
   .list-product-types {
     display: flex;
     align-items: center;

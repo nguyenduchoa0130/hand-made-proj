@@ -43,6 +43,8 @@ const AddProduct = ({
         <div>
           <p className='m-0 mb-1'>Hình ảnh sản phẩm</p>
           <Upload
+            multiple
+            maxCount={5}
             listType='picture-card'
             fileList={fileList}
             onPreview={handlePreview}

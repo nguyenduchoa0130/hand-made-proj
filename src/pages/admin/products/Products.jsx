@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Image, Space, message } from 'antd';
+import { Button, Image, Space, message, Tooltip } from 'antd';
 import moment from 'moment/moment';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -78,6 +78,7 @@ const Products = () => {
     });
 
     try {
+      dispatch(actions.showLoading());
       const product = await productService.createProducts(formData);
       messageApi.success('Thêm thành công');
       reset();
@@ -85,7 +86,9 @@ const Products = () => {
       setProducts([product, ...products]);
       setIsCreate(false);
     } catch (error) {
-      messageApi.error(error.message);
+      messageApi.error(error?.response?.data?.message || error.message);
+    } finally {
+      dispatch(actions.hideLoading());
     }
   };
 
@@ -208,6 +211,12 @@ const Products = () => {
         align: 'center',
       },
       {
+        title: 'Loại sản phẩm',
+        dataIndex: 'type',
+        key: 'type',
+        render: (value) => <span className='text-capitalize'>{value.name}</span>,
+      },
+      {
         title: 'Số Lượng',
         dataIndex: 'countInStock',
         key: 'countInStock',
@@ -232,18 +241,21 @@ const Products = () => {
         title: '',
         key: 'action',
         align: 'right',
-        render: (_, record) => (
+        render: (_, product) => (
           <Space>
-            <Button type='primary' onClick={() => openEditModal(record)} icon={<EditOutlined />}>
-              Chi Tiết
-            </Button>
-            <Button
-              type='primary'
-              onClick={() => deleteProduct(record._id)}
-              danger
-              icon={<DeleteOutlined />}>
-              Xoá
-            </Button>
+            <Tooltip title='Cập nhật'>
+              <Button size='large' type='primary' shape='circle' icon={<EditOutlined />} />
+            </Tooltip>
+            <Tooltip title='Xoá'>
+              <Button
+                danger
+                size='large'
+                type='primary'
+                shape='circle'
+                icon={<DeleteOutlined />}
+                onClick={() => deleteProduct(product._id)}
+              />
+            </Tooltip>
           </Space>
         ),
       },
@@ -272,7 +284,12 @@ const Products = () => {
         </Button>
       </div>
       <div className='pt-3'>
-        <LtDynamicTable cols={tableColumns} dataSrc={products} hasFilters />
+        <LtDynamicTable
+          cols={tableColumns}
+          dataSrc={products}
+          hasFilters
+          searchByFields={['name', 'id', 'price']}
+        />
       </div>
       <LtFormModal
         width={'50vw'}

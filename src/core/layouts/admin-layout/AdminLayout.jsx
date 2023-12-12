@@ -12,7 +12,9 @@ import {
 } from '@ant-design/icons';
 import { Button, Layout, Menu, Tooltip, Typography } from 'antd';
 import { useEffect, useState } from 'react';
-import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { actions } from '../../../stores';
 
 const menuItems = [
   {
@@ -73,6 +75,13 @@ const AdminLayout = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [currentPage, setCurrentPage] = useState('admin');
   const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(actions.resetUser());
+    navigate('/');
+  };
 
   useEffect(() => {
     const segment = location.pathname.split('/').pop();
@@ -120,7 +129,7 @@ const AdminLayout = () => {
                   {titleMap[currentPage]}
                 </Typography.Title>
                 <Tooltip title='Đăng xuất' arrow={true}>
-                  <Button type='primary' danger size='large'>
+                  <Button type='primary' danger size='large' onClick={handleLogout}>
                     <LoginOutlined /> Đăng xuất
                   </Button>
                 </Tooltip>

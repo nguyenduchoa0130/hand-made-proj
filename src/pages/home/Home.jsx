@@ -1,45 +1,56 @@
-import React, { useEffect, useState } from 'react';
-import banner1 from '../../assets/img/Banner-1.png';
-import banner2 from '../../assets/img/Banner-2.png';
-import './style.scss';
-import { useDispatch } from 'react-redux';
-import { actions } from '../../stores';
-import { Button, Empty, message } from 'antd';
-import ProductTypesService from '../../shared/services/product-types.service';
-import { NavLink } from 'react-router-dom';
 import { ShopOutlined } from '@ant-design/icons';
+import { Button, Carousel, Empty, message } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
+import CarouselsService from '../../shared/services/carousels.service';
+import ProductTypesService from '../../shared/services/product-types.service';
+import { actions } from '../../stores';
+import './style.scss';
+
+const contentStyle = {
+  display: 'block',
+  height: '600px',
+  width: '100%',
+  objectFit: 'contain',
+};
 
 const Home = () => {
   const dispatch = useDispatch();
   const [productTypes, setProductTypes] = useState([]);
+  const [carousels, setCarousels] = useState([]);
   const [messageApi, contextHolder] = message.useMessage();
 
   useEffect(() => {
-    const getProductTypes = async () => {
+    const initHomePage = async () => {
       try {
         dispatch(actions.showLoading());
-        const productTypes = await ProductTypesService.getAll();
+        const [productTypes, carousels] = await Promise.all([
+          ProductTypesService.getAll(),
+          CarouselsService.getAll(),
+        ]);
         setProductTypes(productTypes);
+        setCarousels(carousels);
       } catch (error) {
-        messageApi(error?.response?.data?.message || error.message);
+        messageApi.error(error?.response?.data?.message || error.message);
       } finally {
         dispatch(actions.hideLoading());
       }
     };
 
-    getProductTypes();
+    initHomePage();
   }, []);
   return (
     <div className='home'>
       {contextHolder}
       <div className='banner'>
-        <div>
-          <img src={banner1} alt='banner' />
-        </div>
-        <div>
-          <img src={banner2} alt='banner' />
-          <img src={banner2} alt='banner' />
-        </div>
+        <Carousel autoplay className='bg-light'>
+          {carousels.map((item) => (
+            <div key={item._id}>
+              <img style={contentStyle} src={item.imageUrl} alt='Carousel' />
+            </div>
+          ))}
+        </Carousel>
       </div>
       <div className='container-fluid py-3'>
         <h1 className='text-center text-uppercase'>danh mục sản phẩm</h1>
