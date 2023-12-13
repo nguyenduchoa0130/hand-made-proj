@@ -1,4 +1,4 @@
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Button, Form, message } from 'antd';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
@@ -34,8 +34,6 @@ const Information = () => {
   useEffect(() => {
     reset({
       email: userInfo.email,
-      password: '',
-      passwordConfirm: '',
       name: userInfo.name,
       phone: userInfo.phone,
       address: userInfo.address,
@@ -50,7 +48,7 @@ const Information = () => {
       </div>
       <hr />
       <div className='text-center'>
-        <Avatar size={128}>A</Avatar>
+        <Avatar size={128} icon={<UserOutlined />} />
         <div className='pt-3'>
           <Button size='large' icon={<UploadOutlined />}>
             Tải ảnh lên
@@ -58,12 +56,22 @@ const Information = () => {
         </div>
       </div>
       <Form layout='vertical'>
-        <LtFormInput label='Email' name='email' control={control} />
-        <LtFormInput label='Mật khẩu' name='password' control={control} />
-        <LtFormInput label='Xác nhận mật khẩu' name='passwordConfirm' control={control} />
-        <LtFormInput label='Họ và tên' name='name' control={control} />
-        <LtFormInput label='Số điện thoại' name='phone' control={control} />
-        <LtFormInput label='Địa chỉ' name='address' control={control} />
+        <LtFormInput label='Email' name='email' control={control} placeholder='Email' />
+        <LtFormInput label='Mật khẩu' name='password' control={control} placeholder='Mật khẩu' />
+        <LtFormInput
+          label='Xác nhận mật khẩu'
+          name='passwordConfirm'
+          control={control}
+          placeholder='Xác nhận mật khẩu'
+        />
+        <LtFormInput label='Họ và tên' name='name' control={control} placeholder='Họ và tên' />
+        <LtFormInput
+          label='Số điện thoại'
+          name='phone'
+          control={control}
+          placeholder='Số điện thoại'
+        />
+        <LtFormInput label='Địa chỉ' name='address' control={control} placeholder='Địa chỉ' />
         <div className='form-group text-center'>
           <Button size='large' type='primary'>
             Cập Nhật Thông Tin

@@ -223,7 +223,7 @@ const Detail = () => {
               <h3 className='text-uppercase'>các sản phẩm liên quan</h3>
               <hr />
               <div className='py-2'>
-                <Carousel autoplay autoplaySpeed={10000}>
+                <Carousel autoplay autoplaySpeed={5000}>
                   {chunkArray(relevantProducts, 4).map((productSet, index) => (
                     <div className='list-relevant-products' key={index}>
                       {productSet.map((product) => (

@@ -23,7 +23,9 @@ import Users from './pages/admin/users';
 import Detail from './pages/detail';
 import Information from './pages/information';
 import Intro from './pages/intro';
+import MyCart from './pages/my-cart';
 import Order from './pages/order';
+import OrderPayment from './pages/order-payment';
 import Store from './pages/store';
 
 const App = () => {
@@ -62,8 +64,16 @@ const App = () => {
           element: <LazyComponent component={<Intro />} />,
         },
         {
-          path: 'don-hang',
+          path: 'don-hang-cua-toi',
           element: <LazyComponent component={<Order />} />,
+        },
+        {
+          path: 'gio-hang-cua-hoi',
+          element: <LazyComponent component={<MyCart />} />,
+        },
+        {
+          path: 'thanh-toan-don-hang',
+          element: <LazyComponent component={<OrderPayment />} />,
         },
         {
           path: 'chi-tiet-san-pham/:id',
