@@ -1,9 +1,8 @@
-import { InfoCircleOutlined, ShoppingCartOutlined } from '@ant-design/icons';
-import { Card, Image, Tooltip } from 'antd';
+import { Card, Image } from 'antd';
 import React from 'react';
 import { NumericFormat } from 'react-number-format';
-import './style.scss';
 import { NavLink } from 'react-router-dom';
+import './style.scss';
 
 export default function ProductCard({ product }) {
   return (
@@ -13,7 +12,7 @@ export default function ProductCard({ product }) {
           width: 300,
         }}
         className='product-card'
-        cover={<Image alt={product.name} src={product.image[0]} />}>
+        cover={<Image alt={product.name} src={product?.image[0]} />}>
         <Card.Meta
           title={<div className='text-center text-capitalize'>{product.name}</div>}
           description={
