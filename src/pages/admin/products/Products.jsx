@@ -217,7 +217,7 @@ const Products = () => {
         title: 'Loại sản phẩm',
         dataIndex: 'type',
         key: 'type',
-        render: (value) => <span className='text-capitalize'>{value.name}</span>,
+        render: (value) => <span className='text-capitalize'>{value ? value.name : ''}</span>,
       },
       {
         title: 'Số Lượng',
@@ -238,28 +238,32 @@ const Products = () => {
         dataIndex: 'createdAt',
         key: 'createdAt',
         align: 'center',
-        render: (value) => moment(value).format('DD-MM-YYYY'),
+        render: (value) => (value ? moment(value).format('DD-MM-YYYY') : null),
       },
       {
         title: '',
         key: 'action',
         align: 'right',
         render: (_, product) => (
-          <Space>
-            <Tooltip title='Cập nhật'>
-              <Button size='large' type='primary' shape='circle' icon={<EditOutlined />} />
-            </Tooltip>
-            <Tooltip title='Xoá'>
-              <Button
-                danger
-                size='large'
-                type='primary'
-                shape='circle'
-                icon={<DeleteOutlined />}
-                onClick={() => deleteProduct(product._id)}
-              />
-            </Tooltip>
-          </Space>
+          <>
+            {product && (
+              <Space>
+                <Tooltip title='Cập nhật'>
+                  <Button size='large' type='primary' shape='circle' icon={<EditOutlined />} />
+                </Tooltip>
+                <Tooltip title='Xoá'>
+                  <Button
+                    danger
+                    size='large'
+                    type='primary'
+                    shape='circle'
+                    icon={<DeleteOutlined />}
+                    onClick={() => deleteProduct(product._id)}
+                  />
+                </Tooltip>
+              </Space>
+            )}
+          </>
         ),
       },
     ];
