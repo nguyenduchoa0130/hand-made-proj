@@ -206,7 +206,10 @@ const Products = () => {
         dataIndex: 'image',
         key: 'image',
         render: (value) => (
-          <Image src={value[0]} style={{ width: 120, height: 120, objectFit: 'contain' }} />
+          <Image
+            src={value && value[0] ? value[0] : null}
+            style={{ width: 120, height: 120, objectFit: 'contain' }}
+          />
         ),
         align: 'center',
       },
