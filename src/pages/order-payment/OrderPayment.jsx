@@ -1,4 +1,12 @@
-import { CreditCardOutlined, DollarOutlined } from '@ant-design/icons';
+import {
+  ArrowLeftOutlined,
+  CarOutlined,
+  CreditCardOutlined,
+  DollarCircleOutlined,
+  DollarOutlined,
+  FormOutlined,
+  GiftOutlined,
+} from '@ant-design/icons';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { Alert, Button, Form, Image, Radio, message } from 'antd';
@@ -55,6 +63,7 @@ const OrderPayment = () => {
       phone: '',
       fullName: '',
       deliveryAddress: '',
+      paymentMethod: PaymentMethods.CashOnDelivery,
     },
   });
 
@@ -62,6 +71,13 @@ const OrderPayment = () => {
 
   const tableColumns = useMemo(() => {
     return [
+      {
+        title: 'ID',
+        dataIndex: 'productId',
+        key: '_id',
+        render: (value) => value.slice(-8, -1),
+        align: 'center',
+      },
       {
         title: 'Tên sản phẩm',
         dataIndex: 'productName',
@@ -74,12 +90,6 @@ const OrderPayment = () => {
         render: (value) => (
           <Image src={value} style={{ width: 120, height: 120, objectFit: 'contain' }} />
         ),
-        align: 'center',
-      },
-      {
-        title: 'Kích cỡ',
-        dataIndex: 'size',
-        key: 'size',
         align: 'center',
       },
       {
@@ -111,10 +121,11 @@ const OrderPayment = () => {
     const initCheckout = async () => {
       try {
         dispatch(actions.showLoading());
+        dispatch(actions.getCartByUserId(userInfo.id));
         if (totalBill >= 2000) {
           // const paymentIntents = await OrdersService.createPaymentIntents(totalBill);
-          setPaymentIntents(paymentIntents);
-          setOptions({ ...options, clientSecret: paymentIntents.client_secret });
+          // setPaymentIntents(paymentIntents);
+          // setOptions({ ...options, clientSecret: paymentIntents.client_secret });
         }
         reset({
           fullName: userInfo?.name || '',
@@ -134,14 +145,19 @@ const OrderPayment = () => {
   return (
     <>
       {contextHolder}
-      <div className='container-fluid p-5'>
-        <h3 className='text-center page-title'>THANH TOÁN ĐƠN HÀNG</h3>
-        <div className='py-3 center-box'>
-          <img src='/assets/images/divider.png' alt='divider' />
+      <div className='container-fluid p-4'>
+        <h2 className='text-center'>THANH TOÁN ĐƠN HÀNG</h2>
+        <div className='flex ai-center jc-center py-2'>
+          <img src='/images/divider.png' alt='Divider' />
         </div>
         <div className='container py-3'>
           <Form layout='vertical' onFinish={handleSubmit(handleCheckout)}>
-            <h4 className='page-title'>ĐỊA CHỈ GIAO HÀNG</h4>
+            <h4 className='my-2 text-info'>
+              <span className='mr-2'>
+                <CarOutlined />
+              </span>
+              ĐỊA CHỈ GIAO HÀNG
+            </h4>
             <LtFormInput
               label='Người nhận'
               control={control}
@@ -177,7 +193,12 @@ const OrderPayment = () => {
               }}
             />
             <hr />
-            <h4 className='page-title'>PHƯƠNG THỨC THANH TOÁN</h4>
+            <h4 className='my-2 text-info'>
+              <span className='mr-2'>
+                <DollarOutlined />
+              </span>
+              PHƯƠNG THỨC THANH TOÁN
+            </h4>
             <Form.Item>
               <Controller
                 name='paymentMethod'
@@ -212,7 +233,19 @@ const OrderPayment = () => {
               )
             ) : null}
             <hr />
-            <h4 className='page-title'>GHI CHÚ</h4>
+            <h4 className='my-2 text-info'>
+              <span className='mr-2'>
+                <GiftOutlined />
+              </span>
+              MÃ GIẢM GIÁ
+            </h4>
+            <hr />
+            <h4 className='my-3 text-info'>
+              <span className='mr-2'>
+                <FormOutlined />
+              </span>
+              GHI CHÚ
+            </h4>
             <Form.Item>
               <Controller
                 name='notes'
@@ -230,8 +263,8 @@ const OrderPayment = () => {
             <div className='d-flex align-items-center justify-content-end'>
               <div className='w-50 text-right'>
                 <div className='checkout-detail'>
-                  <h4 className='page-title'>TỔNG TIỀN:</h4>
-                  <h4 className='page-title'>
+                  <h4>TỔNG TIỀN:</h4>
+                  <h4>
                     <NumericFormat value={totalBill} displayType='text' thousandSeparator=',' />
                   </h4>
                 </div>
@@ -247,8 +280,8 @@ const OrderPayment = () => {
             </div>
             <hr />
             <div className='checkout-detail'>
-              <NavLink to='/gio-hang'>
-                <Button size='large' type='dashed'>
+              <NavLink to='/gio-hang-cua-toi'>
+                <Button size='large' type='dashed' icon={<ArrowLeftOutlined />}>
                   Quay lại giỏ hàng
                 </Button>
               </NavLink>
@@ -257,15 +290,18 @@ const OrderPayment = () => {
                 type='primary'
                 className='ml-4'
                 htmlType='submit'
-                disabled={!totalBill}>
-                Thanh toán
+                disabled={!totalBill}
+                icon={<DollarCircleOutlined />}>
+                Đặt hàng
               </Button>
             </div>
           </Form>
         </div>
         <hr />
-        <h4 className='page-title text-center'>CHI TIẾT ĐƠN HÀNG</h4>
-        <LtDynamicTable cols={tableColumns} dataSrc={products} rowKey='_id' />
+        <h3 className='text-center'>CHI TIẾT ĐƠN HÀNG</h3>
+        <div className='container'>
+          <LtDynamicTable cols={tableColumns} dataSrc={products} rowKey='_id' />
+        </div>
       </div>
     </>
   );

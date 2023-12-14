@@ -80,6 +80,7 @@ const AdminLayout = () => {
 
   const handleLogout = () => {
     dispatch(actions.resetUser());
+    dispatch(actions.setCartProducts([]));
     navigate('/');
   };
 

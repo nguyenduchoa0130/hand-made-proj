@@ -1,4 +1,4 @@
-import { Avatar, Button, Dropdown, Tooltip } from 'antd';
+import { Avatar, Badge, Button, Dropdown, Tooltip } from 'antd';
 import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -15,6 +15,7 @@ const Header = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const userInfo = useSelector(selectors.selectUserInfo);
+  const products = useSelector(selectors.selectProducts);
 
   const handleNavigate = (direction) => {
     navigate(direction);
@@ -40,6 +41,7 @@ const Header = () => {
             onClick={() => {
               localStorage.removeItem('user');
               dispatch(actions.resetUser());
+              dispatch(actions.setCartProducts([]));
               return handleNavigate('/');
             }}>
             Đăng xuất
@@ -74,9 +76,11 @@ const Header = () => {
             ) : (
               <>
                 <Tooltip title='Giỏ hàng'>
-                  <div className='icon-up' onClick={() => handleNavigate('/gio-hang-cua-toi')}>
-                    <img src={BagIcon} alt='logo' />
-                  </div>
+                  <Badge count={products && products.length ? products.length : null}>
+                    <div className='icon-up' onClick={() => handleNavigate('/gio-hang-cua-toi')}>
+                      <img src={BagIcon} alt='logo' />
+                    </div>
+                  </Badge>
                 </Tooltip>
                 <Tooltip title='Đơn hàng' onClick={() => handleNavigate('/don-hang-cua-toi')}>
                   <div className='icon-up'>

@@ -40,6 +40,7 @@ export default function Login() {
       }
       localStorage.setItem('user', JSON.stringify(user));
       dispatch(actions.setUser(user));
+      dispatch(actions.getCartByUserId(user.id));
       messageApi.open({
         type: 'success',
         content: 'Đăng nhập thành công',

@@ -5,6 +5,7 @@ const initialState = {
   listProductOrders: [],
   isLoading: false,
 };
+
 const globalReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case actions.SHOW_LOADING: {

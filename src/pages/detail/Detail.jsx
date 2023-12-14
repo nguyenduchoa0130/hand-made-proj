@@ -38,6 +38,7 @@ const Detail = () => {
   const dispatch = useDispatch();
 
   const {
+    reset,
     control,
     handleSubmit,
     formState: { errors },
@@ -83,7 +84,20 @@ const Detail = () => {
     }
   };
 
-  const handleAddToCart = (formValue) => {};
+  const handleAddToCart = async (formValue) => {
+    const payload = [
+      {
+        productId: product._id,
+        amount: formValue.amount,
+        image: product?.image[0],
+      },
+    ];
+    const res = await dispatch(actions.addProductToCart(userInfo.id, payload));
+    if (res) {
+      messageApi.success('Đã thêm sản phẩm vào giỏ hàng');
+      reset({ amount: 1 });
+    }
+  };
 
   const handleAddComment = async (formValue) => {
     try {
@@ -207,7 +221,8 @@ const Detail = () => {
                       icon={<ShoppingCartOutlined />}
                       type='primary'
                       className='ml-3'
-                      style={{ alignSelf: 'center', marginTop: 28 }}>
+                      style={{ alignSelf: 'center', marginTop: 28 }}
+                      htmlType='submit'>
                       Thêm vào giỏ hàng
                     </Button>
                   </div>
@@ -227,7 +242,7 @@ const Detail = () => {
                   {chunkArray(relevantProducts, 4).map((productSet, index) => (
                     <div className='list-relevant-products' key={index}>
                       {productSet.map((product) => (
-                        <div className='list-relevant-item'>
+                        <div className='list-relevant-item' key={product._id}>
                           <ProductCard key={product._id} product={product} />
                         </div>
                       ))}
