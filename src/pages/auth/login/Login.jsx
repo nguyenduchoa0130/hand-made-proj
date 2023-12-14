@@ -1,14 +1,14 @@
+import { QuestionOutlined } from '@ant-design/icons';
 import { Button, Form, message } from 'antd';
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
+import LtFormCheckbox from '../../../core/components/lt-form-checkbox';
 import LtFormInput from '../../../core/components/lt-form-input';
 import { authService } from '../../../shared/services/auth-service';
 import { actions } from '../../../stores';
 import './style.scss';
-import LtFormCheckbox from '../../../core/components/lt-form-checkbox';
-import { QuestionOutlined } from '@ant-design/icons';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -45,6 +45,14 @@ export default function Login() {
         type: 'success',
         content: 'Đăng nhập thành công',
       });
+      if (user.isAdmin) {
+        return navigate('/admin');
+      }
+      const backToUrl = localStorage.getItem('backToUrl');
+      if (backToUrl) {
+        localStorage.removeItem('backToUrl');
+        return navigate(backToUrl);
+      }
       return navigate('/');
     } catch (error) {
       messageApi.open({

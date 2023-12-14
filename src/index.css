@@ -89,3 +89,8 @@ span[role='img'] {
 .layout-height {
   min-height: calc(100vh - 160px);
 }
+
+.ant-select-selection-item,
+.ant-select-item-option-content {
+  text-transform: capitalize;
+}

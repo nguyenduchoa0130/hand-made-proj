@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { NumericFormat } from 'react-number-format';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import ProductCard from '../../core/components/product-card';
 import CommentsService from '../../shared/services/comments.service';
@@ -33,6 +33,7 @@ const Detail = () => {
   const [comments, setComments] = useState([]);
   const [relevantProducts, setRelevantProducts] = useState([]);
   const userInfo = useSelector(selectors.selectUserInfo);
+  const navigate = useNavigate();
 
   const [messageApi, contextHolder] = message.useMessage();
   const dispatch = useDispatch();
@@ -85,6 +86,11 @@ const Detail = () => {
   };
 
   const handleAddToCart = async (formValue) => {
+    if (!userInfo) {
+      localStorage.setItem('backToUrl', window.location.pathname);
+      messageApi.warning('Bạn chưa đăng nhập');
+      return navigate('/dang-nhap');
+    }
     const payload = [
       {
         productId: product._id,

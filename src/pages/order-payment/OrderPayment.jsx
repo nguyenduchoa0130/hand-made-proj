@@ -96,7 +96,9 @@ const OrderPayment = () => {
       await OrdersService.createOrder(payload);
       messageApi.success('Đặt đơn hàng thành công');
       dispatch(actions.setCartProducts([]));
-      navigate('/don-hang-cua-toi');
+      setTimeout(() => {
+        navigate('/don-hang-cua-toi');
+      }, 500);
     } catch (error) {
       messageApi.error(error?.response?.data?.message || error.message);
     } finally {
@@ -159,7 +161,7 @@ const OrderPayment = () => {
       try {
         dispatch(actions.showLoading());
         dispatch(actions.getCartByUserId(userInfo.id));
-        if (totalBill >= 2000) {
+        if (totalBill >= 20000) {
           const paymentIntents = await OrdersService.createPaymentIntents(totalBill);
           setPaymentIntents(paymentIntents);
           setOptions({ ...options, clientSecret: paymentIntents.client_secret });

@@ -27,6 +27,9 @@ import MyCart from './pages/my-cart';
 import Order from './pages/order';
 import OrderPayment from './pages/order-payment';
 import Store from './pages/store';
+import NotLoggedInPermission from './core/permissions/NotLoggedInPermission';
+import LoggedInPermission from './core/permissions/LoggedInPermisioin';
+import AdminPermission from './core/permissions/AdminPermission';
 
 const App = () => {
   const routes = useRoutes([
@@ -41,19 +44,51 @@ const App = () => {
         },
         {
           path: 'dang-nhap',
-          element: <LazyComponent component={<Login />} />,
+          element: (
+            <LazyComponent
+              component={
+                <NotLoggedInPermission>
+                  <Login />
+                </NotLoggedInPermission>
+              }
+            />
+          ),
         },
         {
           path: 'dang-ky',
-          element: <LazyComponent component={<Register />} />,
+          element: (
+            <LazyComponent
+              component={
+                <NotLoggedInPermission>
+                  <Register />
+                </NotLoggedInPermission>
+              }
+            />
+          ),
         },
         {
           path: 'thong-tin-ca-nhan',
-          element: <LazyComponent component={<Information />} />,
+          element: (
+            <LazyComponent
+              component={
+                <LoggedInPermission>
+                  <Information />
+                </LoggedInPermission>
+              }
+            />
+          ),
         },
         {
           path: 'quen-mat-khau',
-          element: <LazyComponent component={<ForgotPassword />} />,
+          element: (
+            <LazyComponent
+              component={
+                <NotLoggedInPermission>
+                  <ForgotPassword />
+                </NotLoggedInPermission>
+              }
+            />
+          ),
         },
         {
           path: 'cua-hang',
@@ -65,15 +100,39 @@ const App = () => {
         },
         {
           path: 'don-hang-cua-toi',
-          element: <LazyComponent component={<Order />} />,
+          element: (
+            <LazyComponent
+              component={
+                <LoggedInPermission>
+                  <Order />
+                </LoggedInPermission>
+              }
+            />
+          ),
         },
         {
           path: 'gio-hang-cua-toi',
-          element: <LazyComponent component={<MyCart />} />,
+          element: (
+            <LazyComponent
+              component={
+                <LoggedInPermission>
+                  <MyCart />
+                </LoggedInPermission>
+              }
+            />
+          ),
         },
         {
           path: 'thanh-toan-don-hang',
-          element: <LazyComponent component={<OrderPayment />} />,
+          element: (
+            <LazyComponent
+              component={
+                <LoggedInPermission>
+                  <OrderPayment />
+                </LoggedInPermission>
+              }
+            />
+          ),
         },
         {
           path: 'chi-tiet-san-pham/:id',
@@ -83,7 +142,11 @@ const App = () => {
     },
     {
       path: '/admin',
-      element: <AdminLayout />,
+      element: (
+        <AdminPermission>
+          <AdminLayout />
+        </AdminPermission>
+      ),
       children: [
         {
           path: '',

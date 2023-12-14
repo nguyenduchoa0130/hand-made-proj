@@ -10,6 +10,7 @@ import { OrderStatus } from '../../shared/enums/order-status.enum';
 import { PaymentStatus } from '../../shared/enums/payment-status.enum';
 import { OrdersService } from '../../shared/services/orders.service';
 import { actions, selectors } from '../../stores';
+import Swal from 'sweetalert2';
 
 const colorMap = {
   [PaymentStatus.NOT_YET_PAY]: 'orange',
@@ -28,7 +29,45 @@ const Order = () => {
   const currentUser = useSelector(selectors.selectUserInfo);
   const [messageApi, contextHolder] = message.useMessage();
 
-  const handleCancelOrder = async (order) => {};
+  const handleCancelOrder = async (order) => {
+    try {
+      const { value: notes, isConfirmed } = await Swal.fire({
+        title: 'Vui Lòng Cho Biết Lý Do Huỷ',
+        input: 'textarea',
+        inputLabel: 'Lý do',
+        inputPlaceholder: 'Nhập lý do huỷ',
+        inputValidator: (value) => {
+          if (!value.trim()) {
+            return 'Vui lòng nhập lý do';
+          }
+        },
+        showCancelButton: true,
+        cancelButtonText: 'Đóng',
+        confirmButtonText: 'Huỷ',
+        confirmButtonColor: 'red',
+      });
+      const changes = {
+        notes,
+        orderStatus: OrderStatus.FAILED,
+        deliveryStatus: DeliveryStatus.DELIVERED_FAILED,
+      };
+      if (!isConfirmed) {
+        return;
+      }
+      dispatch(actions.showLoading());
+      const updatedOrders = await OrdersService.updateOrder(order._id, changes);
+      const orderIdx = orders.findIndex((o) => o._id === updatedOrders._id);
+      if (orderIdx !== -1) {
+        orders[orderIdx] = JSON.parse(JSON.stringify(updatedOrders));
+        setOrders([...orders]);
+      }
+      messageApi.success(`Đã huỷ đơn hàng #${order._id.slice(0, 8)}`);
+    } catch (error) {
+      messageApi.error(error?.response?.data?.message || error.message);
+    } finally {
+      dispatch(actions.hideLoading());
+    }
+  };
 
   const mainTableColumns = useMemo(() => {
     return [
@@ -152,7 +191,7 @@ const Order = () => {
         dispatch(actions.hideLoading());
       }
     };
-
+    window.scroll({ top: 0, left: 0, behavior: 'smooth' });
     getOrders();
   }, []);
 

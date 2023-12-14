@@ -8,6 +8,7 @@ const LtFormModal = ({
   children,
   okBtnText,
   cancelBtnText,
+  isUseDefaultFooter = true,
   onCancel = () => {},
   onSubmit = () => {},
   ...others
@@ -24,15 +25,19 @@ const LtFormModal = ({
         {...others}>
         <hr />
         {children}
-        <hr />
-        <div className='d-flex justify-content-between align-items-center'>
-          <Button htmlType='button' onClick={onCancel} size='large'>
-            {cancelBtnText || 'Cancel'}
-          </Button>
-          <Button type='primary' htmlType='submit' onClick={onSubmit} size='large'>
-            {okBtnText || 'Ok'}
-          </Button>
-        </div>
+        {isUseDefaultFooter && (
+          <>
+            <hr />
+            <div className='d-flex justify-content-between align-items-center'>
+              <Button htmlType='button' onClick={onCancel} size='large'>
+                {cancelBtnText || 'Cancel'}
+              </Button>
+              <Button type='primary' htmlType='submit' onClick={onSubmit} size='large'>
+                {okBtnText || 'Ok'}
+              </Button>
+            </div>
+          </>
+        )}
       </Modal>
     </>
   );

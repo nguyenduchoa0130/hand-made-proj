@@ -10,6 +10,7 @@ import AvatarIcon from '../../../assets/img/avatar-2.png';
 import Logo from '../../../assets/img/logo.svg';
 import { actions, selectors } from '../../../stores';
 import './style.scss';
+import { UserOutlined } from '@ant-design/icons';
 
 const Header = () => {
   const navigate = useNavigate();
@@ -60,7 +61,11 @@ const Header = () => {
         <div className='header-container'>
           <div className='up'>
             <div className='input'>
-              <input placeholder='Tìm kiếm tại đây ...' />
+              <input
+                placeholder='Tìm kiếm tại đây ...'
+                onClick={() => navigate('/cua-hang#search')}
+                readOnly
+              />
               <div className='incon-search'>
                 <img src={SearchIcon} alt='logo' />
               </div>
@@ -94,7 +99,7 @@ const Header = () => {
                     }}
                     placement='bottom'
                     arrow>
-                    <Avatar src={AvatarIcon} size='large' />
+                    <Avatar src={userInfo.avatar} size='large' icon={<UserOutlined />} />
                   </Dropdown>
                 </div>
               </>

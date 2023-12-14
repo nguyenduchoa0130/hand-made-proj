@@ -106,7 +106,9 @@ const Store = () => {
           ))}
         </Carousel>
       </div>
-      <h1 className='text-center text-uppercase'>tìm kiếm sản phẩm</h1>
+      <h1 className='text-center text-uppercase' id='search'>
+        tìm kiếm sản phẩm
+      </h1>
       <div className='flex ai-center jc-center py-3'>
         <img src='/images/divider.png' alt='Divider' />
       </div>
