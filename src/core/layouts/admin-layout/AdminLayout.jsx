@@ -91,38 +91,40 @@ const AdminLayout = () => {
 
   return (
     <>
-      <div className='vh-100'>
-        <Layout hasSider className='bg-white h-100'>
-          <Layout.Sider
-            trigger={null}
-            collapsible
-            collapsed={isCollapsed}
-            className='bg-transparent h-100 border-right'>
-            <div className='pt-3 h-100'>
-              <div className='flex ai-center jc-center pb-2'>
-                <Tooltip title='Menu' placement='right' arrow={true}>
-                  <Button
-                    type={!isCollapsed ? 'primary' : 'default'}
-                    danger={!isCollapsed}
-                    onClick={() => setIsCollapsed(!isCollapsed)}>
-                    {isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-                  </Button>
-                </Tooltip>
+      <div style={{ minHeight: '100vh' }}>
+        <Layout hasSider className='bg-white h-100' style={{ minHeight: '100vh' }}>
+          <div className='py-1'>
+            <Layout.Sider
+              trigger={null}
+              collapsible
+              collapsed={isCollapsed}
+              className='bg-transparent h-100 border-right'>
+              <div className='pt-3 h-100'>
+                <div className='flex ai-center jc-center pb-2'>
+                  <Tooltip title='Menu' placement='right' arrow={true}>
+                    <Button
+                      type={!isCollapsed ? 'primary' : 'default'}
+                      danger={!isCollapsed}
+                      onClick={() => setIsCollapsed(!isCollapsed)}>
+                      {isCollapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                    </Button>
+                  </Tooltip>
+                </div>
+                <Menu mode='inline' className='px-2'>
+                  {menuItems.map((item, idx) => (
+                    <Menu.Item
+                      key={`menu-item-${idx}`}
+                      className={currentPage === item.activeKey ? 'ant-menu-item-selected' : ''}>
+                      <NavLink to={item.path} className='flex ai-center'>
+                        {item.icon}
+                        <span>{item.label}</span>
+                      </NavLink>
+                    </Menu.Item>
+                  ))}
+                </Menu>
               </div>
-              <Menu mode='inline' className='px-2'>
-                {menuItems.map((item, idx) => (
-                  <Menu.Item
-                    key={`menu-item-${idx}`}
-                    className={currentPage === item.activeKey ? 'ant-menu-item-selected' : ''}>
-                    <NavLink to={item.path} className='flex ai-center'>
-                      {item.icon}
-                      <span>{item.label}</span>
-                    </NavLink>
-                  </Menu.Item>
-                ))}
-              </Menu>
-            </div>
-          </Layout.Sider>
+            </Layout.Sider>
+          </div>
           <Layout.Content>
             <div className='h-100'>
               <div className='py-3 px-4 border-bottom flex ai-center jc-between pr-5'>

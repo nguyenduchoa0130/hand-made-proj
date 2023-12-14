@@ -79,11 +79,11 @@ const Products = () => {
 
     try {
       dispatch(actions.showLoading());
-      const product = await productService.createProducts(formData);
+      await productService.createProducts(formData);
       messageApi.success('Thêm thành công');
       reset();
       setFileList([]);
-      setProducts([product, ...products]);
+      getProducts();
       setIsCreate(false);
     } catch (error) {
       messageApi.error(error?.response?.data?.message || error.message);
@@ -296,6 +296,7 @@ const Products = () => {
           dataSrc={products}
           hasFilters
           searchByFields={['name', 'id', 'price']}
+          pageSize={6}
         />
       </div>
       <LtFormModal

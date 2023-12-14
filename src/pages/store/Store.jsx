@@ -17,7 +17,7 @@ const contentStyle = {
   display: 'block',
   height: '600px',
   width: '100%',
-  objectFit: 'contain',
+  objectFit: 'cover',
 };
 
 const Store = () => {
