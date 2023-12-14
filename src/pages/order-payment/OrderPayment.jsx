@@ -17,7 +17,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useNavigate } from 'react-router-dom';
 import LtDynamicTable from '../../core/components/lt-dynamic-table';
 import LtFormInput from '../../core/components/lt-form-input';
+import { DeliveryStatus } from '../../shared/enums/delivery-status.enum';
+import { OrderStatus } from '../../shared/enums/order-status.enum';
 import { PaymentMethods } from '../../shared/enums/payment-methods.enum';
+import { PaymentStatus } from '../../shared/enums/payment-status.enum';
+import { OrdersService } from '../../shared/services/orders.service';
 import { actions, selectors } from '../../stores';
 import Payments from './payments/Payments';
 import './styles.scss';
@@ -67,7 +71,38 @@ const OrderPayment = () => {
     },
   });
 
-  const handleCheckout = async (formValues) => {};
+  const handleCheckout = async (formValues) => {
+    try {
+      dispatch(actions.showLoading());
+      const payload = {
+        userId: userInfo.id,
+        paymentMethod: formValues.paymentMethod,
+        paymentStatus:
+          formValues.paymentMethod === PaymentMethods.Credit
+            ? PaymentStatus.PAID
+            : PaymentStatus.NOT_YET_PAY,
+        deliveryStatus: DeliveryStatus.IN_PROGRESS,
+        orderStatus: OrderStatus.IN_PROGRESS,
+        totalBill,
+        notes: formValues.notes,
+        fullName: formValues.fullName.trim() || userInfo.name.trim(),
+        phone: formValues.phone || userInfo.phone,
+        deliveryAddress: formValues.deliveryAddress.trim() || userInfo?.address.trim(),
+        products: products.map((product) => {
+          const { _id, ...rest } = product;
+          return rest;
+        }),
+      };
+      await OrdersService.createOrder(payload);
+      messageApi.success('Đặt đơn hàng thành công');
+      dispatch(actions.setCartProducts([]));
+      navigate('/don-hang-cua-toi');
+    } catch (error) {
+      messageApi.error(error?.response?.data?.message || error.message);
+    } finally {
+      dispatch(actions.hideLoading());
+    }
+  };
 
   const tableColumns = useMemo(() => {
     return [
@@ -103,12 +138,14 @@ const OrderPayment = () => {
         dataIndex: 'price',
         key: 'price',
         align: 'center',
+        render: (value) => <NumericFormat value={value} displayType='text' thousandSeparator=',' />,
       },
       {
         title: 'Tổng tiền',
         dataIndex: 'totalPrice',
         key: 'totalPrice',
         align: 'center',
+        render: (value) => <NumericFormat value={value} displayType='text' thousandSeparator=',' />,
       },
     ];
   }, []);
@@ -123,9 +160,9 @@ const OrderPayment = () => {
         dispatch(actions.showLoading());
         dispatch(actions.getCartByUserId(userInfo.id));
         if (totalBill >= 2000) {
-          // const paymentIntents = await OrdersService.createPaymentIntents(totalBill);
-          // setPaymentIntents(paymentIntents);
-          // setOptions({ ...options, clientSecret: paymentIntents.client_secret });
+          const paymentIntents = await OrdersService.createPaymentIntents(totalBill);
+          setPaymentIntents(paymentIntents);
+          setOptions({ ...options, clientSecret: paymentIntents.client_secret });
         }
         reset({
           fullName: userInfo?.name || '',

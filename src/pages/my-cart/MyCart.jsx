@@ -161,7 +161,11 @@ const Cart = () => {
               />
             </h2>
             <NavLink to='/thanh-toan-don-hang'>
-              <Button size='large' type='primary' icon={<DollarCircleOutlined />}>
+              <Button
+                size='large'
+                type='primary'
+                icon={<DollarCircleOutlined />}
+                disabled={!totalPrice}>
                 Thanh toán đơn hàng
               </Button>
             </NavLink>
