@@ -69,6 +69,7 @@ const titleMap = {
   banner: 'quản lý quảng cáo',
   'khuyen-mai': 'quản lý khuyến mãi',
   'loai-san-pham': 'quản lý loại sản phẩm',
+  'cap-nhat-san-pham': 'cập nhật sản phẩm',
 };
 
 const AdminLayout = () => {
@@ -85,8 +86,12 @@ const AdminLayout = () => {
   };
 
   useEffect(() => {
-    const segment = location.pathname.split('/').pop();
-    setCurrentPage(segment);
+    if (location.pathname.split('/').length >= 4) {
+      setCurrentPage('cap-nhat-san-pham');
+    } else {
+      const segment = location.pathname.split('/').pop();
+      setCurrentPage(segment);
+    }
   }, [location.pathname]);
 
   return (

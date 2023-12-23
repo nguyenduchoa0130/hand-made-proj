@@ -29,14 +29,13 @@ const Information = () => {
   const beforeUpload = (file) => {
     const isImage = file.type.startsWith('image/');
     if (!isImage) {
-      messageApi.warn('Chi cho phép upload hình ảnh');
+      messageApi.warning('Chi cho phép upload hình ảnh');
     }
     return false;
   };
 
   const revokeUrl = () => {
     if (avatarUrl) {
-      console.log('run revoke');
       URL.revokeObjectURL(avatarUrl);
     }
     setAvatarUrl(null);

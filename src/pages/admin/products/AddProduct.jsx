@@ -1,7 +1,7 @@
-import { Form, Modal, Upload } from 'antd';
+import { Form, Modal, Upload, message } from 'antd';
 import React from 'react';
-import LtFormInput from '../../../core/components/lt-form-input';
 import LtFormDropdown from '../../../core/components/lt-form-dropdown';
+import LtFormInput from '../../../core/components/lt-form-input';
 import LtFormTextArea from '../../../core/components/lt-form-textarea';
 
 const AddProduct = ({
@@ -16,8 +16,11 @@ const AddProduct = ({
   handleCancel,
   productTypes = [],
 }) => {
+  const [messageApi, contextHolder] = message.useMessage();
+
   return (
     <>
+      {contextHolder}
       <Form layout='vertical'>
         <LtFormInput
           name='name'
@@ -49,7 +52,9 @@ const AddProduct = ({
             fileList={fileList}
             onPreview={handlePreview}
             onChange={handleChange}
-            beforeUpload={() => false}>
+            beforeUpload={() => {
+              return false;
+            }}>
             {fileList?.length >= 5 ? null : <span>Tải ảnh lên</span>}
           </Upload>
         </div>
